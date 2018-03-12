@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   let newGame = new Game();
-  newGame.initGame();
   newGame.setAiBoard();
-  // console.log(newGame.playerTwoBoard);
+  console.log(newGame);
   const paper = $.id('paper-container');
 
   let clicked = true,
@@ -26,17 +25,26 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   const boardSquareClick = function(e) {
     e.preventDefault();
-    
+
     clicked = !clicked;
     if (!clicked) {
       const placedShipSquares = document.querySelectorAll('.placing-ship');
+      // place ship
       for (let i = 0; i < placedShipSquares.length; i++) {
-        const y = placedShipSquares[i].getAttribute('data-y');
-        const x = placedShipSquares[i].getAttribute('data-x');
-        console.log(`${pickedShip}`);
-        
+        const x = placedShipSquares[i].getAttribute('data-y');
+        const y = placedShipSquares[i].getAttribute('data-x');
+        const playerShip = document.querySelector(
+          `.ship[data-ship="${pickedShip}"`
+        );
+        playerShip.setAttribute('data-placed', 'true');
+        playerShip.classList.remove('clickable');
+        playerShip.style.opacity = '0.2';
 
-        newGame.playerOneBoard[x][y] = `x`;
+        placedShipSquares[i].classList.add('placed-ship');
+
+        // .classList.remove('clickable').style.opacity =
+        // '0.2';
+        newGame.playerOneBoard[x][y] = `${pickedShip}`;
       }
     }
     // this.style.background = 'tomato';
@@ -52,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
     let x = xy[1];
-    const pickedShipLength = pickedShip.length;
+    const pickedShipLength = newGame.playerOneShips[pickedShip].length;
     const relativeShipLengthY = y + pickedShipLength - 1,
       relativeShipLengthX = x + pickedShipLength - 1;
     // rotate ship piece if no room against edge
@@ -151,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     pickedShip = currentShip.getAttribute('data-ship');
     removeClass(playerShips, 'current-ship-selected');
     currentShip.classList.add('current-ship-selected');
+    clicked = true;
   };
   drawBoardArea('track-area');
   drawBoardArea('play-area');

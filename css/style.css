@@ -168,7 +168,10 @@ body {
   height: 30.76px;
 }
 .placing-ship {
-  background: #2140c9;
+  background: rgba(30, 143, 255, 0.445);
+}
+.placed-ship {
+  background: #45a590;
 }
 .current-ship-selected {
   transform: scale(1.3);

@@ -1,6 +1,6 @@
 const Game = function() {
   return {
-    boardMatrix: [
+    playerOneBoard: [
       ['', '', '', '', '', '', '', '', '', '', ''],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -13,9 +13,21 @@ const Game = function() {
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
-    playerOneBoard: [],
-    playerTwoBoard: [],
-    ships: {
+    playerTwoBoard: [
+      ['', '', '', '', '', '', '', '', '', '', ''],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+
+    playerOneShips: {
       ca: [[], [], [], [], []],
       ba: [[], [], [], []],
       cr: [[], [], []],
@@ -24,14 +36,16 @@ const Game = function() {
       su1: [[]],
       su2: [[]]
     },
-    playerOneShips: {},
-    playerTwoShips: {},
-    initGame: function() {
-      this.playerOneBoard = this.boardMatrix;
-      this.playerTwoBoard = this.boardMatrix;
-      this.playerOneShips = this.ships;
-      this.playerTwoShips = this.ships;
+    playerTwoShips: {
+      ca: [[], [], [], [], []],
+      ba: [[], [], [], []],
+      cr: [[], [], []],
+      de1: [[], []],
+      de2: [[], []],
+      su1: [[]],
+      su2: [[]]
     },
+
     selectRandomSquare: function() {
       const x = Math.floor(Math.random() * 10) + 1;
       const y = Math.floor(Math.random() * 10) + 1;
