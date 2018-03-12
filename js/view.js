@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const getXY = function(that) {
     return [+that.getAttribute('data-x'), +that.getAttribute('data-y')];
   };
-  const boardSquareClick = function(e) {
+  const trackBoardSquareClick = function(e) {
     e.preventDefault();
 
     clicked = !clicked;
@@ -60,13 +60,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     clickedSquare = getXY(this);
   };
+  const playBoardSquareClick = function(e) {
+
+  };
   const removeClass = function(elements, classToRm) {
     for (let i = 0; i < elements.length; i++) {
       elements[i].classList.contains(classToRm) &&
         elements[i].classList.remove(classToRm);
     }
   };
-
 
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
@@ -76,37 +78,39 @@ document.addEventListener('DOMContentLoaded', function() {
       relativeShipLengthX = x + pickedShipLength - 1;
 
     // rotate ship piece if no room against edge
-    if (relativeShipLengthY > 9 && relativeShipLengthX > 9) {
-      if (!direction) {
+    try {
+      if (relativeShipLengthY > 9 && relativeShipLengthX > 9) {
+        if (!direction) {
+          for (let i = 0; i < pickedShipLength; i++) {
+            $.id(`${area}-${x}-${y - i}`).classList.add('placing-ship');
+          }
+        } else if (direction) {
+          for (let i = 0; i < pickedShipLength; i++) {
+            $.id(`${area}-${x - i}-${y}`).classList.add('placing-ship');
+          }
+        }
+      } else if (!direction) {
+        if (!direction && relativeShipLengthY > 9) {
+          direction = !direction;
+        } else if (direction && relativeShipLengthX > 9) {
+          direction = !direction;
+        }
         for (let i = 0; i < pickedShipLength; i++) {
-          $.id(`${area}-${x}-${y - i}`).classList.add('placing-ship');
+          $.id(`${area}-${x}-${y + i}`).classList.add('placing-ship');
         }
       } else if (direction) {
+        if (!direction && relativeShipLengthY > 9) {
+          direction = !direction;
+        } else if (direction && relativeShipLengthX > 9) {
+          direction = !direction;
+        }
         for (let i = 0; i < pickedShipLength; i++) {
-          $.id(`${area}-${x - i}-${y}`).classList.add('placing-ship');
+          $.id(`${area}-${x + i}-${y}`).classList.add('placing-ship');
         }
       }
-    } else if (!direction) {
-      if (!direction && relativeShipLengthY > 9) {
-        direction = !direction;
-      } else if (direction && relativeShipLengthX > 9) {
-        direction = !direction;
-      }
-      for (let i = 0; i < pickedShipLength; i++) {
-        $.id(`${area}-${x}-${y + i}`).classList.add('placing-ship');
-      }
-    } else if (direction) {
-      if (!direction && relativeShipLengthY > 9) {
-        direction = !direction;
-      } else if (direction && relativeShipLengthX > 9) {
-        direction = !direction;
-      }
-      for (let i = 0; i < pickedShipLength; i++) {
-        $.id(`${area}-${x + i}-${y}`).classList.add('placing-ship');
-      }
-    }
+    } catch (err) {}
   };
-  const boardSquareHover = function() {
+  const trackBoardSquareHover = function() {
     if (clicked) {
       const area = this.getAttribute('data-area');
       const xy = getXY(this);
@@ -150,17 +154,19 @@ document.addEventListener('DOMContentLoaded', function() {
           div.id = `${area}-${i - 1}-${c - 1}`;
           div.classList = 'board-square clickable';
           if (area === 'track-area') {
-            div.addEventListener('click', boardSquareClick);
-            div.addEventListener('mousemove', boardSquareHover);
+            div.addEventListener('click', trackBoardSquareClick);
+            div.addEventListener('mousemove', trackBoardSquareHover);
           }
-          if (
-            area === 'play-area' &&
-            newGame.checkSquare(newGame.playerTwoBoard, [i, c])
-          ) {
-            div.textContent = newGame.playerTwoBoard[i][c].slice(0, 2);
-            div.style.background = 'tomato';
-            div.style.color = 'black';
+          if (area === 'play-area') {
+            div.classList.add('play-board-square');
+
+            if (newGame.checkSquare(newGame.playerTwoBoard, [i, c])) {
+              div.textContent = newGame.playerTwoBoard[i][c].slice(0, 2);
+              div.style.background = 'tomato';
+              div.style.color = 'black';
+            }
           }
+
           if (
             area === 'track-area' &&
             newGame.checkSquare(newGame.playerOneBoard, [i, c])
@@ -195,6 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#place-randomly').addEventListener('click', () => {
     newGame.setBoard('playerOneBoard', 'playerOneShips');
     drawBoardArea('track-area');
-    removeClass(playerShips, 'clickable');//TODO: make ships completely unclickable and fade them, make an addClass function
+    removeClass(playerShips, 'clickable'); //TODO: make ships completely unclickable and fade them, make an addClass function
   });
 });

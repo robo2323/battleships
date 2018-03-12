@@ -23,11 +23,12 @@ body {
   font-family: 'Nanum Brush Script', cursive;
   font-size: 1.5rem;
   box-sizing: border-box;
-  transition: all .3s;
 }
 
 .clickable {
   cursor: pointer;
+  transition: all 0.3s;
+  
 }
 .faded {
   opacity: 0.2;
@@ -146,19 +147,28 @@ body {
   text-align: center;
   line-height: 35px;
   color: @red;
+  border: 1px solid @black;
 }
 
 #track-area {
   .area-mixin;
-  .board-square {
-    border: 1px solid @black;
-  }
+  
+}
+.board-square {
+  border: 1px solid @black;
 }
 
 #play-area {
   .area-mixin;
-  .board-square {
-    border: 1px solid @black;
+  
+}
+
+.play-board-square {
+  &:hover {
+    border: 2px solid tomato;
+    transform: scale(1.2);
+    background: rgba(255, 99, 71, 0.363);
+    
   }
 }
 
@@ -194,7 +204,7 @@ body {
 .placed-ship {
   background: @blue;
   opacity: 1;
-  border: 1px solid @blue;
+  
 }
 
 .current-ship-selected {
