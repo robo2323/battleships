@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 @import url('https://fonts.googleapis.com/css?family=Nanum+Brush+Script');
 
-@blue: #2140c9;
-@green: rgb(19, 196, 19);
+@blue: rgb(70, 130, 180);
+@green: rgb(75, 83, 32);
 @red: red;
 @black: #333;
 @offwhite: #f6f6ef;
@@ -23,10 +23,14 @@ body {
   font-family: 'Nanum Brush Script', cursive;
   font-size: 1.5rem;
   box-sizing: border-box;
+  transition: all .3s;
 }
 
 .clickable {
   cursor: pointer;
+}
+.faded {
+  opacity: 0.2;
 }
 
 #paper-container {
@@ -141,19 +145,20 @@ body {
   padding: 0;
   text-align: center;
   line-height: 35px;
+  color: @red;
 }
 
 #track-area {
   .area-mixin;
   .board-square {
-    border: 1px solid @green;
+    border: 1px solid @black;
   }
 }
 
 #play-area {
   .area-mixin;
   .board-square {
-    border: 1px solid @blue;
+    border: 1px solid @black;
   }
 }
 
@@ -182,11 +187,14 @@ body {
 }
 
 .placing-ship {
-  background: rgba(30, 143, 255, 0.445);
+  background: @blue;
+  opacity: 0.5;
 }
 
-.placed-ship{
-  background: rgb(69, 165, 144);
+.placed-ship {
+  background: @blue;
+  opacity: 1;
+  border: 1px solid @blue;
 }
 
 .current-ship-selected {

@@ -15,9 +15,13 @@ body {
   font-family: 'Nanum Brush Script', cursive;
   font-size: 1.5rem;
   box-sizing: border-box;
+  transition: all .3s;
 }
 .clickable {
   cursor: pointer;
+}
+.faded {
+  opacity: 0.2;
 }
 #paper-container {
   position: relative;
@@ -122,6 +126,7 @@ body {
   padding: 0;
   text-align: center;
   line-height: 35px;
+  color: red;
 }
 #track-area {
   display: grid;
@@ -132,7 +137,7 @@ body {
   color: #333;
 }
 #track-area .board-square {
-  border: 1px solid #13c413;
+  border: 1px solid #333;
 }
 #play-area {
   display: grid;
@@ -143,7 +148,7 @@ body {
   color: #333;
 }
 #play-area .board-square {
-  border: 1px solid #2140c9;
+  border: 1px solid #333;
 }
 .ship-container {
   display: flex;
@@ -162,16 +167,19 @@ body {
   margin: 20px;
 }
 .ship div {
-  background: #2140c9;
+  background: #4682b4;
   border: 1px solid #333;
   width: 26.72px;
   height: 30.76px;
 }
 .placing-ship {
-  background: rgba(30, 143, 255, 0.445);
+  background: #4682b4;
+  opacity: 0.5;
 }
 .placed-ship {
-  background: #45a590;
+  background: #4682b4;
+  opacity: 1;
+  border: 1px solid #4682b4;
 }
 .current-ship-selected {
   transform: scale(1.3);

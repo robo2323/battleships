@@ -28,22 +28,22 @@ const Game = function() {
     ],
 
     playerOneShips: {
-      ca: [[], [], [], [], []],
-      ba: [[], [], [], []],
-      cr: [[], [], []],
-      de1: [[], []],
-      de2: [[], []],
-      su1: [[]],
-      su2: [[]]
+      Carrier: [[], [], [], [], []],
+      Battleship: [[], [], [], []],
+      Cruiser: [[], [], []],
+      Destroyer_One: [[], []],
+      Destroyer_Two: [[], []],
+      Sub_One: [[]],
+      Sub_Two: [[]]
     },
     playerTwoShips: {
-      ca: [[], [], [], [], []],
-      ba: [[], [], [], []],
-      cr: [[], [], []],
-      de1: [[], []],
-      de2: [[], []],
-      su1: [[]],
-      su2: [[]]
+      Carrier: [[], [], [], [], []],
+      Battleship: [[], [], [], []],
+      Cruiser: [[], [], []],
+      Destroyer_One: [[], []],
+      Destroyer_Two: [[], []],
+      Sub_One: [[]],
+      Sub_Two: [[]]
     },
 
     selectRandomSquare: function() {
@@ -68,15 +68,17 @@ const Game = function() {
       }
     },
     checkSquareInDirection: function(board, [x, y], direction, ship) {
+      x = +x;
+      y = +y;
       for (let i = 0; i < ship.length; i++) {
         if (
-          direction === 'x' &&
+          direction === false &&
           ship.length < 10 - y &&
           this.checkSquare(board, [x, y + i])
         ) {
           return true;
         } else if (
-          direction === 'y' &&
+          direction === true &&
           ship.length < 10 - x &&
           this.checkSquare(board, [x + i, y])
         ) {
@@ -85,37 +87,41 @@ const Game = function() {
       }
       return false;
     },
-    setAiBoard: function() {
+    resetBoard: function(board) {
+      for (let i = 1; i < 11; i++) {
+        for (let c = 1; c < 11; c++) {
+          this[board][i][c] = 0;
+        }
+      }
+    },
+    setBoard: function(board = 'playerTwoBoard', ships = 'playerTwoShips') {
+      this.resetBoard(board);
+
       const setStartSquare = function(that, ship, shipName) {
         let square = that.selectRandomSquare();
-        let direction = Math.round(Math.random() * 1) === 0 ? 'x' : 'y';
+        let direction = Math.round(Math.random() * 1) === 0 ? false : true;
         while (
-          that.checkSquareInDirection(
-            that.playerTwoBoard,
-            [...square],
-            direction,
-            ship
-          )
+          that.checkSquareInDirection(that[board], [...square], direction, ship)
         ) {
           square = that.selectRandomSquare();
         }
 
-        if (direction === 'x' && ship.length < 10 - square[1]) {
+        if (direction === false && ship.length < 10 - square[1]) {
           for (let i = 0; i < ship.length; i++) {
-            that.playerTwoBoard[square[0]][square[1] + i] = shipName;
+            that[board][square[0]][square[1] + i] = shipName;
           }
-        } else if (direction === 'y' && ship.length < 10 - square[0]) {
+        } else if (direction === true && ship.length < 10 - square[0]) {
           for (let i = 0; i < ship.length; i++) {
-            that.playerTwoBoard[square[0] + i][square[1]] = shipName;
+            that[board][square[0] + i][square[1]] = shipName;
           }
         } else {
           setStartSquare(that, ship, shipName);
         }
       };
-      for (const shipKey in this.playerTwoShips) {
-        const ship = this.playerTwoShips[shipKey];
+      for (const shipKey in this[ships]) {
+        const ship = this[ships][shipKey];
 
-        setStartSquare(this, ship, shipKey);
+        setStartSquare(this, ship, shipKey, board, ships);
       }
     }
   };

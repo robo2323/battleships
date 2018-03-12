@@ -1,13 +1,13 @@
+/*globals $*/
 document.addEventListener('DOMContentLoaded', function() {
   let newGame = new Game();
-  newGame.setAiBoard();
+  newGame.setBoard();
   console.log(newGame);
   const paper = $.id('paper-container');
-
   let clicked = true,
     clickedSquare = [],
     direction = false,
-    pickedShip = 'ca';
+    pickedShip = 'Carrier';
   // draw blue lines on paper
   for (let i = 20; i < 820; i += 20) {
     const currentDivId = `line ${i}`;
@@ -28,26 +28,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     clicked = !clicked;
     if (!clicked) {
-      const placedShipSquares = document.querySelectorAll('.placing-ship');
       // place ship
-      for (let i = 0; i < placedShipSquares.length; i++) {
-        const x = placedShipSquares[i].getAttribute('data-y');
-        const y = placedShipSquares[i].getAttribute('data-x');
-        const playerShip = document.querySelector(
-          `.ship[data-ship="${pickedShip}"`
-        );
-        playerShip.setAttribute('data-placed', 'true');
-        playerShip.classList.remove('clickable');
-        playerShip.style.opacity = '0.2';
 
-        placedShipSquares[i].classList.add('placed-ship');
+      const placedShipSquares = document.querySelectorAll('.placing-ship');
 
-        // .classList.remove('clickable').style.opacity =
-        // '0.2';
-        newGame.playerOneBoard[x][y] = `${pickedShip}`;
+      const cantPlace = newGame.checkSquareInDirection(
+        newGame.playerOneBoard,
+        [
+          placedShipSquares[0].getAttribute('data-y'),
+          placedShipSquares[0].getAttribute('data-x')
+        ],
+        direction,
+        newGame.playerOneShips[pickedShip]
+      );
+      if (!cantPlace) {
+        for (let i = 0; i < placedShipSquares.length; i++) {
+          let x = placedShipSquares[i].getAttribute('data-y');
+          let y = placedShipSquares[i].getAttribute('data-x');
+          const playerShip = document.querySelector(
+            `.ship[data-ship="${pickedShip}"`
+          );
+          playerShip.setAttribute('data-placed', 'true');
+          playerShip.classList.remove('clickable');
+          playerShip.style.opacity = '0.2';
+
+          placedShipSquares[i].classList.add('placed-ship');
+
+          newGame.playerOneBoard[x][y] = `${pickedShip}`;
+        }
       }
     }
-    // this.style.background = 'tomato';
     clickedSquare = getXY(this);
   };
   const removeClass = function(elements, classToRm) {
@@ -57,14 +67,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
+
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
     let x = xy[1];
     const pickedShipLength = newGame.playerOneShips[pickedShip].length;
     const relativeShipLengthY = y + pickedShipLength - 1,
       relativeShipLengthX = x + pickedShipLength - 1;
-    // rotate ship piece if no room against edge
 
+    // rotate ship piece if no room against edge
     if (relativeShipLengthY > 9 && relativeShipLengthX > 9) {
       if (!direction) {
         for (let i = 0; i < pickedShipLength; i++) {
@@ -95,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   };
-  const boardSquareHover = function(e) {
+  const boardSquareHover = function() {
     if (clicked) {
       const area = this.getAttribute('data-area');
       const xy = getXY(this);
@@ -108,9 +119,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
+  //-------------------------------
   // draw grids/create board squares for play and tracking areas
   const drawBoardArea = (area) => {
     const areaEl = $.id(area);
+    areaEl.innerHTML = '';
     // set char code to print letters along x axis
     const charCode = 64;
 
@@ -144,8 +157,17 @@ document.addEventListener('DOMContentLoaded', function() {
             area === 'play-area' &&
             newGame.checkSquare(newGame.playerTwoBoard, [i, c])
           ) {
-            div.textContent = newGame.playerTwoBoard[i][c];
+            div.textContent = newGame.playerTwoBoard[i][c].slice(0, 2);
             div.style.background = 'tomato';
+            div.style.color = 'black';
+          }
+          if (
+            area === 'track-area' &&
+            newGame.checkSquare(newGame.playerOneBoard, [i, c])
+          ) {
+            div.textContent = newGame.playerOneBoard[i][c].slice(0, 2);
+            div.style.background = 'steelblue';
+            div.style.color = 'black';
           }
         }
         areaEl.appendChild(div);
@@ -161,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
     currentShip.classList.add('current-ship-selected');
     clicked = true;
   };
+
   drawBoardArea('track-area');
   drawBoardArea('play-area');
   for (let i = 0; i < playerShips.length; i++) {
@@ -169,6 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keydown', () => {
     direction = !direction;
   });
-
-  // $.('track-area').addEventListener('mousemove')
+  document.querySelector('#place-randomly').addEventListener('click', () => {
+    newGame.setBoard('playerOneBoard', 'playerOneShips');
+    drawBoardArea('track-area');
+    removeClass(playerShips, 'clickable');//TODO: make ships completely unclickable and fade them, make an addClass function
+  });
 });
