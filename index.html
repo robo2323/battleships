@@ -4,45 +4,81 @@
 <head>
     <meta charset="utf-8" />
     <title>Battleships!</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/$.js"></script>
+    <script src="./js/logic.js"></script>
+    <script src="./js/view.js"></script>
 </head>
 
 <body>
+    <div class="app">
 
-    <label>Square this number:
-        <input type="number" id="square-input" size="2">
-    </label>
-    <button id="square-button">Calculate</button>
-    <br>
-    <br>
 
-    <label>Half this number:
-        <input type="number" id="half-input" size="2">
-    </label>
-    <button id="half-button">Calculate</button>
-    <br>
-    <br>
+        <div id="paper-container">
 
-    <label>
-        Fraction:
-        <input type="number" id="percent1-input" size="2">
-    </label>
-    <label>
-        Whole:
-        <input type="number" id="percent2-input" size="2">
-    </label>
-    <button id="percent-button">Calculate</button>
-    <br>
-    <br>
 
-    <label>Calculate area of circle with radius:
-        <input type="number" id="area-input" size="2">
-    </label>
-    <button id="area-button">Calculate</button>
-    <br>
-    <br>
-    <div id="solution"></div>
+            <div id="paper1"></div>
+            <div id="paper2">
+                <div class="board">
+                    <div id="track-area" class="divider"></div>
+                    <div class="divider">
+                        <div class="ship-container p1-ship-container">
+                            <div data-ship="ca" id="carrier" class="ship clickable current-ship-selected">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div data-ship="ba" id="battleship" class="ship clickable">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div data-ship="cr" id="cruiser" class="ship clickable">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div data-ship="de1" id="destroyer-one" class="ship clickable">
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div data-ship="de2" id="destroyer-two" class="ship clickable">
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div data-ship="su1" id="sub-one" class="ship clickable">
+                                <div></div>
 
-    <script src="./js/main.js"></script>
+                            </div>
+                            <div data-ship="su2" id="sub-two" class="ship clickable">
+                                <div></div>
+
+                            </div>
+                        </div>
+                        <!--end  p1-ship container-->
+                    </div>
+                    <!--end  p1-ship-area/divider-->
+                    <div class="divider"></div>
+                    <div id="play-area" class="divider"></div>
+
+                </div>
+            </div>
+            <div id="paper3"></div>
+            <div id="paper4"></div>
+            <div id="paper5"></div>
+            <div id="paper6"></div>
+
+
+        </div>
+
+
+    </div>
+
+
+
 
 </body>
 

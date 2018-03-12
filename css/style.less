@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 @import url('https://fonts.googleapis.com/css?family=Nanum+Brush+Script');
+
+@blue: #2140c9;
+@green: rgb(19, 196, 19);
+@red: red;
+@black: #333;
+@offwhite: #f6f6ef;
+@white: #fdfdfb;
+
 html,
 body {
   height: 100%;
@@ -16,86 +24,95 @@ body {
   font-size: 1.5rem;
   box-sizing: border-box;
 }
+
 .clickable {
   cursor: pointer;
 }
+
 #paper-container {
   position: relative;
   margin: 40px auto;
   width: 800px;
   height: 900px;
-  background: #fdfdfb;
+  background: @white;
   opacity: 1;
   z-index: 10;
   border-radius: 0 0 10px 10px;
 }
+
 #paper1 {
-  border-top: 18px dotted #ca995a;
+  border-top: 18px dotted rgb(202, 153, 90);
   border-radius: 0 0 10px 10px;
   position: absolute;
   margin: -3.4% auto;
   width: 800px;
   height: 100px;
-  background: #fdfdfb;
+  background: @white;
   border-radius: 3px;
   z-index: -1;
 }
+
 #paper2 {
   position: absolute;
   margin: auto;
   width: 800px;
   height: 900px;
-  background: #fdfdfb;
+  background: @white;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 4px #111;
   z-index: -1;
 }
+
 #paper3 {
   position: absolute;
   margin: -4px auto;
   width: 800px;
   height: 900px;
-  background: #f6f6ef;
+  background: @offwhite;
   border-top: 5px dotted white;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 4px #111;
   transform: rotate(-2deg);
   z-index: -2;
 }
+
 #paper4 {
   position: absolute;
   margin: auto;
   width: 800px;
   height: 900px;
-  background: #fdfdfb;
+  background: @white;
   border-radius: 0 0 10px 10px;
   box-shadow: 1px 1px 4px #111;
   transform: rotate(-3deg);
   z-index: -3;
 }
+
 #paper5 {
   position: absolute;
   margin: auto;
   width: 800px;
   height: 900px;
-  background: #f6f6ef;
+  background: @offwhite;
   border-radius: 0 0 10px 10px;
   box-shadow: 2px 2px 5px #111;
   transform: rotate(-4deg);
   z-index: -4;
 }
+
 #paper6 {
   position: absolute;
   margin: auto;
   top: 0.8%;
   width: 800px;
   height: 800px;
-  background: #f6f6ef;
+  background: @offwhite;
   border-radius: 0 0 10px 10px;
   box-shadow: 1px 1px 5px #111;
   transform: rotate(-5deg);
   z-index: -5;
 }
+
 .board {
   margin: 0 auto;
   width: 800px;
@@ -108,14 +125,16 @@ body {
 .divider {
   background: transparent;
 }
+
 .area-mixin {
   display: grid;
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #333;
-  color: #333;
+  border: 2px solid @black;
+  color: @black;
 }
+
 .board-square {
   background: transparent;
   margin: 0;
@@ -123,28 +142,21 @@ body {
   text-align: center;
   line-height: 35px;
 }
+
 #track-area {
-  display: grid;
-  grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
-  grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
-  grid-auto-flow: row;
-  border: 2px solid #333;
-  color: #333;
+  .area-mixin;
+  .board-square {
+    border: 1px solid @green;
+  }
 }
-#track-area .board-square {
-  border: 1px solid #13c413;
-}
+
 #play-area {
-  display: grid;
-  grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
-  grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
-  grid-auto-flow: row;
-  border: 2px solid #333;
-  color: #333;
+  .area-mixin;
+  .board-square {
+    border: 1px solid @blue;
+  }
 }
-#play-area .board-square {
-  border: 1px solid #2140c9;
-}
+
 .ship-container {
   display: flex;
   flex-direction: row-reverse;
@@ -160,16 +172,19 @@ body {
   flex-direction: row;
   transition: all 0.2s;
   margin: 20px;
+
+  div {
+    background: @blue;
+    border: 1px solid @black;
+    width: 26.72px;
+    height: 30.76px;
+  }
 }
-.ship div {
-  background: #2140c9;
-  border: 1px solid #333;
-  width: 26.72px;
-  height: 30.76px;
-}
+
 .placing-ship {
-  background: #2140c9;
+  background: @blue;
 }
+
 .current-ship-selected {
   transform: scale(1.3);
   border: 2px solid tomato;
