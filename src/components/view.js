@@ -5,9 +5,11 @@ import renderLines from './renderLines';
 import getXY from './getXY';
 import removeClass from './removeClass';
 
-export default document.addEventListener('DOMContentLoaded', function() {
+export default function() {
   let newGame = new Game();
   newGame.setBoard();
+  console.log(newGame);
+
   let clicked = true,
     clickedSquare = [],
     direction = false,
@@ -48,25 +50,62 @@ export default document.addEventListener('DOMContentLoaded', function() {
 
           newGame.playerOneBoard[x][y] = `${pickedShip}`;
         }
-        console.log(newGame.playerOneBoard);
       }
     }
     clickedSquare = getXY(this);
   };
+
+  const checkShot = function(board, [x, y], ships, that) {
+    x = +x;
+    y = +y;
+    board = newGame[board];
+    ships = newGame[ships];
+
+    if (board[x][y] === 'X' || board[x][y] === '/') {
+      return;
+    }
+
+    const shot = newGame.checkSquare(board, [x, y]);
+
+    if (shot) {
+      that.classList.add('hit');
+      that.textContent = 'X';
+      ships[board[x][y]].hits.push(x, y);
+
+      if (ships[board[x][y]].hits.length === ships[board[x][y]].strength * 2) {
+        console.log(board[x][y], 'destroyed');
+      }
+      board[x][y] = 'X';
+    } else {
+      that.classList.add('miss');
+      that.textContent = '/';
+      board[x][y] = '/';
+    }
+  };
+
   // make a shot/guess
   const playBoardSquareClick = function(e) {
     e.preventDefault();
     const x = this.getAttribute('data-y');
     const y = this.getAttribute('data-x');
 
-    console.log(newGame.checkSquare(newGame.playerTwoBoard, [x, y]));
+    checkShot('playerTwoBoard', [x, y], 'playerTwoShips', this);
+    const aiTurn = newGame.aiTurn();
+    setTimeout(() => {
+      checkShot(
+        'playerOneBoard',
+        [...aiTurn],
+        'playerOneShips',
+        $.id(`track-area-${aiTurn[0]}-${aiTurn[1]}`)
+      );
+    }, 1000);
   };
 
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
     let x = xy[1];
 
-    const pickedShipLength = newGame.playerOneShips[pickedShip].length;
+    const pickedShipLength = newGame.playerOneShips[pickedShip].strength;
     const relativeShipLengthY = y + pickedShipLength - 1,
       relativeShipLengthX = x + pickedShipLength - 1;
 
@@ -111,13 +150,11 @@ export default document.addEventListener('DOMContentLoaded', function() {
       const allSquares = document.querySelectorAll(`#${area} > div`);
       removeClass(allSquares, 'placing-ship');
       this.classList.add('placing-ship');
-      console.log(xy);
 
       drawShipToPlace(area, xy);
     }
   };
 
-  
   const drawBoardArea = (area) => {
     const areaEl = $.id(area);
     areaEl.innerHTML = '';
@@ -154,20 +191,21 @@ export default document.addEventListener('DOMContentLoaded', function() {
             div.classList.add('play-board-square');
             div.addEventListener('click', playBoardSquareClick);
             //for testing purposes
-            if (newGame.checkSquare(newGame.playerTwoBoard, [i, c])) {
-              div.textContent = newGame.playerTwoBoard[i][c].slice(0, 2);
-              div.style.background = 'tomato';
-              div.style.color = 'black';
-            }
+            // if (newGame.checkSquare(newGame.playerTwoBoard, [i, c])) {
+            //   div.textContent = newGame.playerTwoBoard[i][c].slice(0, 2);
+            //   div.style.background = 'tomato';
+            //   div.style.color = 'black';
+            // }
           }
 
           if (
             area === 'track-area' &&
             newGame.checkSquare(newGame.playerOneBoard, [i, c])
           ) {
-            div.textContent = newGame.playerOneBoard[i][c].slice(0, 2);
-            div.style.background = 'steelblue';
-            div.style.color = 'black';
+            div.classList.add('placed-ship');
+            // div.textContent = newGame.playerOneBoard[i][c].slice(0, 2);
+            // div.style.background = 'steelblue';
+            // div.style.color = 'black';
           }
         }
         areaEl.appendChild(div);
@@ -186,6 +224,7 @@ export default document.addEventListener('DOMContentLoaded', function() {
 
   drawBoardArea('track-area');
   drawBoardArea('play-area');
+
   for (let i = 0; i < playerShips.length; i++) {
     playerShips[i].addEventListener('click', clickPlayerShipHandeler);
   }
@@ -197,4 +236,4 @@ export default document.addEventListener('DOMContentLoaded', function() {
     drawBoardArea('track-area');
     removeClass(playerShips, 'clickable'); //TODO: make ships completely unclickable and fade them, make an addClass function
   });
-});
+}

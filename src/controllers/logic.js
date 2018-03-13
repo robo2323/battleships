@@ -30,22 +30,22 @@ export default function() {
     ],
 
     playerOneShips: {
-      Carrier: [[], [], [], [], []],
-      Battleship: [[], [], [], []],
-      Cruiser: [[], [], []],
-      Destroyer_One: [[], []],
-      Destroyer_Two: [[], []],
-      Sub_One: [[]],
-      Sub_Two: [[]]
+      Carrier: { hits: [], strength: 5 },
+      Battleship: { hits: [], strength: 4 },
+      Cruiser: { hits: [], strength: 3 },
+      Destroyer_One: { hits: [], strength: 2 },
+      Destroyer_Two: { hits: [], strength: 2 },
+      Sub_One: { hits: [], strength: 1 },
+      Sub_Two: { hits: [], strength: 1 }
     },
     playerTwoShips: {
-      Carrier: [[], [], [], [], []],
-      Battleship: [[], [], [], []],
-      Cruiser: [[], [], []],
-      Destroyer_One: [[], []],
-      Destroyer_Two: [[], []],
-      Sub_One: [[]],
-      Sub_Two: [[]]
+      Carrier: { hits: [], strength: 5 },
+      Battleship: { hits: [], strength: 4 },
+      Cruiser: { hits: [], strength: 3 },
+      Destroyer_One: { hits: [], strength: 2 },
+      Destroyer_Two: { hits: [], strength: 2 },
+      Sub_One: { hits: [], strength: 1 },
+      Sub_Two: { hits: [], strength: 1 }
     },
 
     selectRandomSquare: function() {
@@ -75,16 +75,16 @@ export default function() {
     checkSquareInDirection: function(board, [x, y], direction, ship) {
       x = +x;
       y = +y;
-      for (let i = 0; i < ship.length; i++) {
+      for (let i = 0; i < ship.strength; i++) {
         if (
           direction === false &&
-          ship.length < 10 - y &&
+          ship.strength < 10 - y &&
           this.checkSquare(board, [x, y + i])
         ) {
           return true;
         } else if (
           direction === true &&
-          ship.length < 10 - x &&
+          ship.strength < 10 - x &&
           this.checkSquare(board, [x + i, y])
         ) {
           return true;
@@ -92,6 +92,7 @@ export default function() {
       }
       return false;
     },
+
     resetBoard: function(board) {
       for (let i = 1; i < 11; i++) {
         for (let c = 1; c < 11; c++) {
@@ -111,12 +112,12 @@ export default function() {
           square = that.selectRandomSquare();
         }
 
-        if (direction === false && ship.length < 10 - square[1]) {
-          for (let i = 0; i < ship.length; i++) {
+        if (direction === false && ship.strength < 10 - square[1]) {
+          for (let i = 0; i < ship.strength; i++) {
             that[board][square[0]][square[1] + i] = shipName;
           }
-        } else if (direction === true && ship.length < 10 - square[0]) {
-          for (let i = 0; i < ship.length; i++) {
+        } else if (direction === true && ship.strength < 10 - square[0]) {
+          for (let i = 0; i < ship.strength; i++) {
             that[board][square[0] + i][square[1]] = shipName;
           }
         } else {
@@ -128,8 +129,11 @@ export default function() {
 
         setStartSquare(this, ship, shipKey, board, ships);
       }
+    },
+    aiTurn: function() {
+      let square = this.selectRandomSquare();
+
+      return square;
     }
   };
-};
-
-
+}

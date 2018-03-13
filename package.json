@@ -9,12 +9,14 @@
     "eslint-plugin-standard": "^3.0.1",
     "file-loader": "^1.1.11",
     "style-loader": "^0.20.3",
-    "webpack-cli": "^2.0.11"
+    "webpack-cli": "^2.0.11",
+    "webpack-serve": "^0.2.0"
   },
   "dependencies": {
     "webpack": "^4.1.1"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "dev-server": "webpack-serve ./webpack.config.js"
   }
 }

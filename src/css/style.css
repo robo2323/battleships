@@ -111,14 +111,19 @@ body {
 }
 .divider {
   background: transparent;
+  display: flex;
+}
+.divider h1 {
+  transform: rotateZ(-90deg);
+  margin: 55px;
 }
 .area-mixin {
   display: grid;
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #4b5320;
-  color: #4b5320;
+  border: 2px solid #205344;
+  color: #205344;
 }
 .board-square {
   background: transparent;
@@ -126,27 +131,30 @@ body {
   padding: 0;
   text-align: center;
   line-height: 35px;
-  color: red;
-  border: 1px solid #4b5320;
+  color: #ff4800;
+  border: 1px solid #205344;
 }
 #track-area {
   display: grid;
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #4b5320;
-  color: #4b5320;
+  border: 2px solid #205344;
+  color: #205344;
 }
 .board-square {
-  border: 1px solid #4b5320;
+  border: 1px solid #205344;
 }
 #play-area {
   display: grid;
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #4b5320;
-  color: #4b5320;
+  border: 2px solid #205344;
+  color: #205344;
+}
+.play-board-square {
+  font-size: 65px;
 }
 .play-board-square:hover {
   border: 2px solid tomato;
@@ -157,34 +165,49 @@ body {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  justify-content: space-evenly;
   height: 100%;
-  width: 50%;
+  width: 75%;
   flex-wrap: wrap-reverse;
   margin: 0 auto;
 }
 .ship {
   display: flex;
   flex-direction: row;
-  transition: all 0.2s;
   margin: 20px;
 }
+.ship p {
+  font-size: 25px;
+  line-height: 60px;
+  vertical-align: bottom;
+  height: 30px;
+  margin: 0 20px 0 0;
+}
 .ship div {
-  background: #4682b4;
-  border: 1px solid #4b5320;
+  transition: all 0.1s;
+  text-align: center;
+  line-height: 30px;
   width: 26.72px;
   height: 30.76px;
+  text-decoration: underline;
+  padding: 0 4px 0 4px;
 }
 .placing-ship {
-  background: #4682b4;
+  background: #2fd16d;
   opacity: 0.5;
+  border: 1px dashed #4682b4;
 }
 .placed-ship {
-  background: #4682b4;
+  background: #2fd16d;
   opacity: 1;
-  border: 1px dashed #97ac4f;
+  border: 1px dashed #4682b4;
 }
-.current-ship-selected {
+.current-ship-selected div {
   transform: scale(1.3);
-  border: 2px solid tomato;
+  color: #2fd16d;
+}
+.hit {
+  color: #ff4800;
+}
+.miss {
+  color: dodgerblue;
 }
