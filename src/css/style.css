@@ -117,8 +117,8 @@ body {
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #333;
-  color: #333;
+  border: 2px solid #4b5320;
+  color: #4b5320;
 }
 .board-square {
   background: transparent;
@@ -127,26 +127,26 @@ body {
   text-align: center;
   line-height: 35px;
   color: red;
-  border: 1px solid #333;
+  border: 1px solid #4b5320;
 }
 #track-area {
   display: grid;
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #333;
-  color: #333;
+  border: 2px solid #4b5320;
+  color: #4b5320;
 }
 .board-square {
-  border: 1px solid #333;
+  border: 1px solid #4b5320;
 }
 #play-area {
   display: grid;
   grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
   grid-auto-flow: row;
-  border: 2px solid #333;
-  color: #333;
+  border: 2px solid #4b5320;
+  color: #4b5320;
 }
 .play-board-square:hover {
   border: 2px solid tomato;
@@ -171,7 +171,7 @@ body {
 }
 .ship div {
   background: #4682b4;
-  border: 1px solid #333;
+  border: 1px solid #4b5320;
   width: 26.72px;
   height: 30.76px;
 }
@@ -182,6 +182,7 @@ body {
 .placed-ship {
   background: #4682b4;
   opacity: 1;
+  border: 1px dashed #97ac4f;
 }
 .current-ship-selected {
   transform: scale(1.3);

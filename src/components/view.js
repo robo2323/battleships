@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   let newGame = new Game();
   newGame.setBoard();
-  console.log(newGame);
   const paper = $.id('paper-container');
   let clicked = true,
     clickedSquare = [],
@@ -56,12 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
           newGame.playerOneBoard[x][y] = `${pickedShip}`;
         }
+        console.log(newGame.playerOneBoard);
       }
     }
     clickedSquare = getXY(this);
   };
+  // make a shot/guess
   const playBoardSquareClick = function(e) {
+    e.preventDefault();
+    const x = this.getAttribute('data-y');
+    const y = this.getAttribute('data-x');
 
+    console.log(newGame.checkSquare(newGame.playerTwoBoard, [x, y]));
   };
   const removeClass = function(elements, classToRm) {
     for (let i = 0; i < elements.length; i++) {
@@ -73,6 +78,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
     let x = xy[1];
+    console.log(x, y);
+
     const pickedShipLength = newGame.playerOneShips[pickedShip].length;
     const relativeShipLengthY = y + pickedShipLength - 1,
       relativeShipLengthX = x + pickedShipLength - 1;
@@ -118,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const allSquares = document.querySelectorAll(`#${area} > div`);
       removeClass(allSquares, 'placing-ship');
       this.classList.add('placing-ship');
+      console.log(xy);
 
       drawShipToPlace(area, xy);
     }
@@ -148,10 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
           div.classList = `board-square`;
         } else if (i !== 0 && c !== 0) {
           //add id to current board square
-          div.setAttribute('data-y', `${i - 1}`);
-          div.setAttribute('data-x', `${c - 1}`);
+          div.setAttribute('data-y', `${i}`);
+          div.setAttribute('data-x', `${c}`);
           div.setAttribute('data-area', `${area}`);
-          div.id = `${area}-${i - 1}-${c - 1}`;
+          div.id = `${area}-${i}-${c}`;
           div.classList = 'board-square clickable';
           if (area === 'track-area') {
             div.addEventListener('click', trackBoardSquareClick);
@@ -159,7 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           if (area === 'play-area') {
             div.classList.add('play-board-square');
-
+            div.addEventListener('click', playBoardSquareClick);
+            //for testing purposes
             if (newGame.checkSquare(newGame.playerTwoBoard, [i, c])) {
               div.textContent = newGame.playerTwoBoard[i][c].slice(0, 2);
               div.style.background = 'tomato';

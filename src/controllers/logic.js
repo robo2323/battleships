@@ -52,6 +52,9 @@ const Game = function() {
       return [x, y];
     },
     checkSquare: function(board, [x, y]) {
+      x = +x;
+      y = +y;
+
       return board[x][y] ? true : false;
     },
     checkAdjacentSquares: function(board, [x, y]) {
