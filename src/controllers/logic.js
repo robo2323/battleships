@@ -54,14 +54,13 @@ export default function() {
       return [x, y];
     },
     checkSquare: function(board, [x, y]) {
-      x = +x;
-      y = +y;
-
-      return board[x][y] ? true : false;
+      x=+x;
+      y=+y;
+      return this[board][x][y];
     },
     checkAdjacentSquares: function(board, [x, y]) {
-      x = +x;
-      y = +y;
+      x=+x;
+      y=+y;
       const up = this.checkSquare(board, [x, y - 1]);
       const down = this.checkSquare(board, [x, y + 1]);
       const left = this.checkSquare(board, [x - 1, y]);
@@ -72,19 +71,20 @@ export default function() {
         return false;
       }
     },
-    checkSquareInDirection: function(board, [x, y], direction, ship) {
+    checkSquareInDirection: function(board, [x, y], direction, ships, ship) {
       x = +x;
       y = +y;
-      for (let i = 0; i < ship.strength; i++) {
+      const shipStrength = this[ships][ship].strength;
+      for (let i = 0; i < shipStrength; i++) {
         if (
           direction === false &&
-          ship.strength < 10 - y &&
+          shipStrength < 10 - y &&
           this.checkSquare(board, [x, y + i])
         ) {
           return true;
         } else if (
           direction === true &&
-          ship.strength < 10 - x &&
+          shipStrength < 10 - x &&
           this.checkSquare(board, [x + i, y])
         ) {
           return true;
@@ -106,18 +106,26 @@ export default function() {
       const setStartSquare = function(that, ship, shipName) {
         let square = that.selectRandomSquare();
         let direction = Math.round(Math.random() * 1) === 0 ? false : true;
+        const shipStrength = that[ships][ship].strength;
+
         while (
-          that.checkSquareInDirection(that[board], [...square], direction, ship)
+          that.checkSquareInDirection(
+            board,
+            [...square],
+            direction,
+            ships,
+            ship
+          )
         ) {
           square = that.selectRandomSquare();
         }
 
-        if (direction === false && ship.strength < 10 - square[1]) {
-          for (let i = 0; i < ship.strength; i++) {
+        if (!direction && shipStrength < 10 - square[1]) {
+          for (let i = 0; i < shipStrength; i++) {
             that[board][square[0]][square[1] + i] = shipName;
           }
-        } else if (direction === true && ship.strength < 10 - square[0]) {
-          for (let i = 0; i < ship.strength; i++) {
+        } else if (direction && shipStrength < 10 - square[0]) {
+          for (let i = 0; i < shipStrength; i++) {
             that[board][square[0] + i][square[1]] = shipName;
           }
         } else {
@@ -125,14 +133,18 @@ export default function() {
         }
       };
       for (const shipKey in this[ships]) {
-        const ship = this[ships][shipKey];
+        // const ship = this[ships][shipKey];
 
-        setStartSquare(this, ship, shipKey, board, ships);
+        setStartSquare(this, shipKey, shipKey);
       }
     },
     aiTurn: function() {
       let square = this.selectRandomSquare();
-
+      // while (
+      //   this.checkSquareInDirection('playerOneBoard', [...square])
+      // ) {
+      //   square = this.selectRandomSquare();
+      // }
       return square;
     }
   };
