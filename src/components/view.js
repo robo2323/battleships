@@ -1,27 +1,20 @@
 /*globals $*/
-document.addEventListener('DOMContentLoaded', function() {
+import $ from '../utils/$';
+import Game from '../controllers/logic';
+import renderLines from './renderLines';
+import getXY from './getXY';
+import removeClass from './removeClass';
+
+export default document.addEventListener('DOMContentLoaded', function() {
   let newGame = new Game();
   newGame.setBoard();
-  const paper = $.id('paper-container');
   let clicked = true,
     clickedSquare = [],
     direction = false,
     pickedShip = 'Carrier';
   // draw blue lines on paper
-  for (let i = 20; i < 820; i += 20) {
-    const currentDivId = `line ${i}`;
-    paper.innerHTML += `<div id='${currentDivId}'></div>`;
-    const currentDiv = document.getElementById(currentDivId);
-    currentDiv.style.position = 'relative';
-    currentDiv.style.top = `${i}px`;
-    currentDiv.style.height = '2px';
-    currentDiv.style.width = '100%';
-    currentDiv.style.backgroundColor = 'rgba(0,0,120,0.08';
-    currentDiv.style.zIndex = '1';
-  }
-  const getXY = function(that) {
-    return [+that.getAttribute('data-x'), +that.getAttribute('data-y')];
-  };
+  renderLines();
+
   const trackBoardSquareClick = function(e) {
     e.preventDefault();
 
@@ -68,17 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log(newGame.checkSquare(newGame.playerTwoBoard, [x, y]));
   };
-  const removeClass = function(elements, classToRm) {
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].classList.contains(classToRm) &&
-        elements[i].classList.remove(classToRm);
-    }
-  };
 
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
     let x = xy[1];
-    console.log(x, y);
 
     const pickedShipLength = newGame.playerOneShips[pickedShip].length;
     const relativeShipLengthY = y + pickedShipLength - 1,
@@ -131,8 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  //-------------------------------
-  // draw grids/create board squares for play and tracking areas
+  
   const drawBoardArea = (area) => {
     const areaEl = $.id(area);
     areaEl.innerHTML = '';

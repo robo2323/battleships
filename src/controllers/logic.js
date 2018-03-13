@@ -1,4 +1,6 @@
-const Game = function() {
+import $ from '../utils/$';
+
+export default function() {
   return {
     playerOneBoard: [
       ['', '', '', '', '', '', '', '', '', '', ''],
@@ -129,3 +131,5 @@ const Game = function() {
     }
   };
 };
+
+
