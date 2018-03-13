@@ -10,7 +10,6 @@ export default function() {
   newGame.setBoard();
 
   let clicked = true,
-    clickedSquare = [],
     direction = false,
     pickedShip = 'Carrier';
   // draw blue lines on paper
@@ -57,8 +56,7 @@ export default function() {
   const checkShot = function(board, [x, y], ships, that) {
     x = +x;
     y = +y;
-    // board = newGame[board];
-    // ships = newGame[ships];
+ 
     const square = newGame[board][x][y];
 
     if (square === 'X' || square === '/') {
@@ -69,8 +67,7 @@ export default function() {
 
     if (shot) {
       const ship = newGame[ships][square];
-      // that.classList.add('hit');
-      // that.textContent = 'X';
+     
       ship.hits.push(x, y);
 
       if (ship.hits.length === ship.strength * 2) {
@@ -78,15 +75,13 @@ export default function() {
       }
       newGame[board][x][y] = 'X';
     } else {
-      // that.classList.add('miss');
-      // that.textContent = '/';
+
       newGame[board][x][y] = '/';
     }
     board === 'playerTwoBoard'
       ? drawBoardArea('play-area')
       : drawBoardArea('track-area');
-    // drawBoardArea('play-area');
-    // drawBoardArea('track-area');
+  
   };
 
   // make a shot/guess
