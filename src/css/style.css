@@ -115,7 +115,7 @@ body {
 }
 .divider h1 {
   transform: rotateZ(-90deg);
-  margin: 55px;
+  margin: 60% -28%;
 }
 .area-mixin {
   display: grid;
@@ -133,6 +133,7 @@ body {
   line-height: 35px;
   color: #ff4800;
   border: 1px solid #205344;
+  font-size: 40px;
 }
 #track-area {
   display: grid;
@@ -160,6 +161,9 @@ body {
   border: 2px solid tomato;
   transform: scale(1.2);
   background: rgba(255, 99, 71, 0.363);
+}
+.track-board-square {
+  font-size: 40px;
 }
 .ship-container {
   display: flex;

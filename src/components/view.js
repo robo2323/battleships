@@ -10,6 +10,7 @@ export default function() {
   newGame.setBoard();
 
   let clicked = true,
+    clickable = true,
     direction = false,
     pickedShip = 'Carrier';
   // draw blue lines on paper
@@ -18,45 +19,65 @@ export default function() {
   const trackBoardSquareClick = function(e) {
     e.preventDefault();
 
-    clicked = !clicked;
-    if (!clicked) {
+    clicked = clickable ? !clicked : clicked;
+    if (!clicked && clickable) {
       // place ship
+      const placedShipSquares = document.querySelectorAll('.placing-ship');
+
       const y = placedShipSquares[0].getAttribute('data-y');
       const x = placedShipSquares[0].getAttribute('data-x');
-      const placedShipSquares = document.querySelectorAll('.placing-ship');
 
       const cantPlace = newGame.checkSquareInDirection(
         'playerOneBoard',
         [y, x],
         direction,
+        'playerTwoShips',
         pickedShip
       );
-      console.log(cantPlace);
 
       if (!cantPlace) {
+        const playerShip = document.querySelector(
+          `.ship[data-ship="${pickedShip}"]`
+        );
         for (let i = 0; i < placedShipSquares.length; i++) {
           let x = placedShipSquares[i].getAttribute('data-y');
           let y = placedShipSquares[i].getAttribute('data-x');
-          const playerShip = document.querySelector(
-            `.ship[data-ship="${pickedShip}"`
-          );
+
+          // placedShipSquares[i].classList.add('placed-ship');
+
+          newGame.playerOneBoard[x][y] =
+            newGame.playerOneShips[pickedShip].display[i];
+          drawBoardArea('track-area');
+        }
+        if (
+          document.querySelectorAll('.ship[data-placed="false"]').length > 0
+        ) {
           playerShip.setAttribute('data-placed', 'true');
           playerShip.classList.remove('clickable');
           playerShip.style.opacity = '0.2';
 
-          placedShipSquares[i].classList.add('placed-ship');
+          if (pickedShip !== 'Sub_Two') {
+            const newPickedShip = playerShip.nextElementSibling;
+            const placed = newPickedShip.getAttribute('data-placed');
 
-          newGame.playerOneBoard[x][y] = `${pickedShip}`;
+            if (placed) {              
+              pickedShip = newPickedShip.getAttribute('data-ship');
+            }
+          } 
+          clicked = !clicked;
+        } else {
+          clicked = false;
+          clickable = false;
         }
       }
     }
-    clickedSquare = getXY(this);
+
   };
 
   const checkShot = function(board, [x, y], ships, that) {
     x = +x;
     y = +y;
- 
+
     const square = newGame[board][x][y];
 
     if (square === 'X' || square === '/') {
@@ -67,7 +88,7 @@ export default function() {
 
     if (shot) {
       const ship = newGame[ships][square];
-     
+
       ship.hits.push(x, y);
 
       if (ship.hits.length === ship.strength * 2) {
@@ -75,13 +96,11 @@ export default function() {
       }
       newGame[board][x][y] = 'X';
     } else {
-
       newGame[board][x][y] = '/';
     }
     board === 'playerTwoBoard'
       ? drawBoardArea('play-area')
       : drawBoardArea('track-area');
-  
   };
 
   // make a shot/guess
@@ -91,7 +110,9 @@ export default function() {
     const y = this.getAttribute('data-x');
 
     checkShot('playerTwoBoard', [x, y], 'playerTwoShips', this);
+
     const aiTurn = newGame.aiTurn();
+
     setTimeout(() => {
       checkShot(
         'playerOneBoard',
@@ -107,19 +128,28 @@ export default function() {
     let x = xy[1];
 
     const pickedShipLength = newGame.playerOneShips[pickedShip].strength;
-    const relativeShipLengthY = y + pickedShipLength - 1,
-      relativeShipLengthX = x + pickedShipLength - 1;
+    const relativeShipLengthY = y + pickedShipLength - 2,
+      relativeShipLengthX = x + pickedShipLength - 2;
+    newGame.pOneStyles = [];
 
     // rotate ship piece if no room against edge
     try {
       if (relativeShipLengthY > 9 && relativeShipLengthX > 9) {
         if (!direction) {
           for (let i = 0; i < pickedShipLength; i++) {
-            $.id(`${area}-${x}-${y - i}`).classList.add('placing-ship');
+            // $.id(`${area}-${x}-${y - i}`).classList.add('placing-ship');
+
+            newGame.pOneStyles.push([x, y - i, 'placing-ship']);
+            // newGame.playerOneBoard[x][y - i] =
+            //   newGame.playerOneShips[pickedShip].display[i];
           }
         } else if (direction) {
           for (let i = 0; i < pickedShipLength; i++) {
-            $.id(`${area}-${x - i}-${y}`).classList.add('placing-ship');
+            // $.id(`${area}-${x - i}-${y}`).classList.add('placing-ship');
+
+            newGame.pOneStyles.push([x - i, y, 'placing-ship']);
+            // newGame.playerOneBoard[x - i][y] =
+            //   newGame.playerOneShips[pickedShip].display[i];
           }
         }
       } else if (!direction) {
@@ -129,7 +159,11 @@ export default function() {
           direction = !direction;
         }
         for (let i = 0; i < pickedShipLength; i++) {
-          $.id(`${area}-${x}-${y + i}`).classList.add('placing-ship');
+          // $.id(`${area}-${x}-${y + i}`).classList.add('placing-ship');
+
+          newGame.pOneStyles.push([x, y + i, 'placing-ship']);
+          // newGame.playerOneBoard[x][y + i] =
+          //   newGame.playerOneShips[pickedShip].display[i];
         }
       } else if (direction) {
         if (!direction && relativeShipLengthY > 9) {
@@ -138,19 +172,22 @@ export default function() {
           direction = !direction;
         }
         for (let i = 0; i < pickedShipLength; i++) {
-          $.id(`${area}-${x + i}-${y}`).classList.add('placing-ship');
+          // $.id(`${area}-${x + i}-${y}`).classList.add('placing-ship');
+
+          newGame.pOneStyles.push([x + i, y, 'placing-ship']);
+          // newGame.playerOneBoard[x + i][y] =
+          //   newGame.playerOneShips[pickedShip].display[i];
         }
       }
     } catch (err) {}
+    drawBoardArea('track-area');
   };
   const trackBoardSquareHover = function() {
     if (clicked) {
       const area = this.getAttribute('data-area');
       const xy = getXY(this);
 
-      const allSquares = document.querySelectorAll(`#${area} > div`);
-      removeClass(allSquares, 'placing-ship');
-      this.classList.add('placing-ship');
+      // this.classList.add('placing-ship');
 
       drawShipToPlace(area, xy);
     }
@@ -190,8 +227,16 @@ export default function() {
           const squareContent = newGame.checkSquare(board, [i, c]);
 
           if (area === 'track-area') {
+            div.classList.add('track-board-square');
+
+            newGame.pOneStyles.forEach((element) => {
+              if (element[0] === i && element[1] === c) {
+                div.classList.add(element[2]);
+              }
+            });
             div.addEventListener('click', trackBoardSquareClick);
             div.addEventListener('mousemove', trackBoardSquareHover);
+
             if (squareContent) {
               if (squareContent === '/') {
                 div.textContent = squareContent;
@@ -202,7 +247,7 @@ export default function() {
 
                 div.classList.add('hit');
               } else {
-                div.classList.add('placed-ship');
+                div.textContent = squareContent;
               }
             }
           }
@@ -244,14 +289,23 @@ export default function() {
   for (let i = 0; i < playerShips.length; i++) {
     playerShips[i].addEventListener('click', clickPlayerShipHandeler);
   }
+
   document.addEventListener('keydown', () => {
     direction = !direction;
   });
   document.querySelector('#place-randomly').addEventListener('click', () => {
     newGame.setBoard('playerOneBoard', 'playerOneShips');
-    drawBoardArea('track-area');
-    console.log(newGame);
+    clicked = false;
+    clickable = false;
+    newGame.pOneStyles = [];
 
-    removeClass(playerShips, 'clickable');
+    for (let i = 0; i < playerShips.length; i++) {
+      playerShips[i].setAttribute('data-placed', 'true');
+      playerShips[i].classList.remove('clickable');
+      playerShips[i].style.opacity = '0.2';
+      playerShips[i].removeEventListener('click', clickPlayerShipHandeler);
+    }
+
+    drawBoardArea('track-area');
   });
 }

@@ -15,6 +15,7 @@ export default function() {
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
+    pOneStyles: [],
     playerTwoBoard: [
       ['', '', '', '', '', '', '', '', '', '', ''],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -28,24 +29,24 @@ export default function() {
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
-
+    pTwoStyles: [],
     playerOneShips: {
-      Carrier: { hits: [], strength: 5 },
-      Battleship: { hits: [], strength: 4 },
-      Cruiser: { hits: [], strength: 3 },
-      Destroyer_One: { hits: [], strength: 2 },
-      Destroyer_Two: { hits: [], strength: 2 },
-      Sub_One: { hits: [], strength: 1 },
-      Sub_Two: { hits: [], strength: 1 }
+      Carrier: { display: ['<=', '=', '=', '=', '=]'], hits: [], strength: 5 },
+      Battleship: { display: ['<<', '[]', '[]', '>>'], hits: [], strength: 4 },
+      Cruiser: { display: ['<<', '[]', '>>'], hits: [], strength: 3 },
+      Destroyer_One: { display: ['<[',']>'], hits: [], strength: 2 },
+      Destroyer_Two: { display: ['<[',']>'], hits: [], strength: 2 },
+      Sub_One: { display: ['<^'], hits: [], strength: 1 },
+      Sub_Two: { display: ['<^'], hits: [], strength: 1 }
     },
     playerTwoShips: {
-      Carrier: { hits: [], strength: 5 },
-      Battleship: { hits: [], strength: 4 },
-      Cruiser: { hits: [], strength: 3 },
-      Destroyer_One: { hits: [], strength: 2 },
-      Destroyer_Two: { hits: [], strength: 2 },
-      Sub_One: { hits: [], strength: 1 },
-      Sub_Two: { hits: [], strength: 1 }
+      Carrier: { display: ['<=', '=', '=', '=', '=]'], hits: [], strength: 5 },
+      Battleship: { display: ['<<', '[]', '[]', '>>'], hits: [], strength: 4 },
+      Cruiser: { display: ['<<', '[]', '>>'], hits: [], strength: 3 },
+      Destroyer_One: { display: ['<[',']>'], hits: [], strength: 2 },
+      Destroyer_Two: { display: ['<[',']>'], hits: [], strength: 2 },
+      Sub_One: { display: ['<^'], hits: [], strength: 1 },
+      Sub_Two: { display: ['<^'], hits: [], strength: 1 }
     },
 
     selectRandomSquare: function() {
@@ -54,13 +55,13 @@ export default function() {
       return [x, y];
     },
     checkSquare: function(board, [x, y]) {
-      x=+x;
-      y=+y;
+      x = +x;
+      y = +y;
       return this[board][x][y];
     },
     checkAdjacentSquares: function(board, [x, y]) {
-      x=+x;
-      y=+y;
+      x = +x;
+      y = +y;
       const up = this.checkSquare(board, [x, y - 1]);
       const down = this.checkSquare(board, [x, y + 1]);
       const left = this.checkSquare(board, [x - 1, y]);
