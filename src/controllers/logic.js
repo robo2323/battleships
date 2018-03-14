@@ -49,7 +49,10 @@ export default function() {
       Sub_One: { display: ['<^'], hits: [], strength: 1 },
       Sub_Two: { display: ['<^'], hits: [], strength: 1 }
     },
-
+    pOneSunkShips:0,
+    pTwoSunkShips:0,
+    pOneScore:0,
+    pTwoScore:0,
     selectRandomSquare: function() {
       const x = Math.floor(Math.random() * 10) + 1;
       const y = Math.floor(Math.random() * 10) + 1;

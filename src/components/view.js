@@ -1,4 +1,4 @@
-//TODO: get ship parts to rotate, get enemy ships to display once destroyed, win/lose state, AI
+//TODO:  get enemy ships to display once destroyed, win/lose state - display and tehn reset player ships , AI, salvos
 /*globals $*/
 import $ from '../utils/$';
 import Game from '../controllers/logic';
@@ -7,16 +7,18 @@ import getXY from './getXY';
 import removeClass from './removeClass';
 
 export default function() {
-  let newGame = new Game();
-  newGame.setBoard();
-
   let clicked = true,
     clickable = true,
     direction = false,
     pickedShip = 'Carrier';
   // draw blue lines on paper
   renderLines();
-
+  const startNewGame = function() {
+    let newGame = new Game();
+    newGame.setBoard();
+    return newGame;
+  };
+  let newGame = startNewGame();
   const trackBoardSquareClick = function(e) {
     e.preventDefault();
 
@@ -73,6 +75,7 @@ export default function() {
         }
       }
     }
+    console.log(newGame);
   };
 
   const checkShot = function(board, [x, y], ships, that) {
@@ -95,12 +98,36 @@ export default function() {
       ship.hits.push(x, y);
 
       if (ship.hits.length === ship.strength * 2) {
-        console.log(square, 'destroyed');
+        console.log(square.split('-')[1], 'destroyed');
+        if (board === 'playerOneBoard') {
+          newGame.pOneSunkShips++;
+        } else {
+          newGame.pTwoSunkShips++;
+        }
+        console.log('p1' + newGame.pOneSunkShips + newGame.pTwoSunkShips);
       }
       newGame[board][x][y] = 'X';
+      if (board === 'playerOneBoard') {
+        newGame.pTwoScore++;
+        if (newGame.pTwoScore === 18) {
+          console.log('computer wins');
+          drawBoardArea('play-area');
+          drawBoardArea('track-area');
+          newGame = startNewGame();
+        }
+      } else {
+        newGame.pOneScore++;
+        if (newGame.pOneScore === 18) {
+          drawBoardArea('play-area');
+          drawBoardArea('track-area');
+          console.log('you win!');
+          newGame = startNewGame();
+        }
+      }
     } else {
       newGame[board][x][y] = '/';
     }
+
     board === 'playerTwoBoard'
       ? drawBoardArea('play-area')
       : drawBoardArea('track-area');
