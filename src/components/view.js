@@ -1,3 +1,4 @@
+//TODO: get ship parts to rotate, get enemy ships to display once destroyed, win/lose state, AI
 /*globals $*/
 import $ from '../utils/$';
 import Game from '../controllers/logic';
@@ -45,8 +46,9 @@ export default function() {
 
           // placedShipSquares[i].classList.add('placed-ship');
 
-          newGame.playerOneBoard[x][y] =
-            newGame.playerOneShips[pickedShip].display[i];
+          newGame.playerOneBoard[x][y] = `${
+            newGame.playerOneShips[pickedShip].display[i]
+          }-${pickedShip}${direction && '-rot'}`;
           drawBoardArea('track-area');
         }
         if (
@@ -60,10 +62,10 @@ export default function() {
             const newPickedShip = playerShip.nextElementSibling;
             const placed = newPickedShip.getAttribute('data-placed');
 
-            if (placed) {              
+            if (placed) {
               pickedShip = newPickedShip.getAttribute('data-ship');
             }
-          } 
+          }
           clicked = !clicked;
         } else {
           clicked = false;
@@ -71,7 +73,6 @@ export default function() {
         }
       }
     }
-
   };
 
   const checkShot = function(board, [x, y], ships, that) {
@@ -80,14 +81,16 @@ export default function() {
 
     const square = newGame[board][x][y];
 
-    if (square === 'X' || square === '/') {
-      return;
+    if (square === 'X' || (square === '/' && board === 'playerOneBoard')) {
+      aiPlay();
+    } else if (square === 'X' || square === '/') {
+      return true;
     }
 
     const shot = newGame.checkSquare(board, [x, y]);
 
     if (shot) {
-      const ship = newGame[ships][square];
+      const ship = newGame[ships][square.split('-')[1]];
 
       ship.hits.push(x, y);
 
@@ -102,25 +105,36 @@ export default function() {
       ? drawBoardArea('play-area')
       : drawBoardArea('track-area');
   };
+  const aiPlay = function() {
+    let aiTurn = newGame.selectRandomSquare();
+    const x = aiTurn[0];
+    const y = aiTurn[1];
 
+    setTimeout(() => {
+      const shot = checkShot(
+        'playerOneBoard',
+        [...aiTurn],
+        'playerOneShips',
+        $.id(`track-area-${x}-${y}`)
+      );
+      newGame.consultBrain();
+    }, 500);
+  };
   // make a shot/guess
   const playBoardSquareClick = function(e) {
     e.preventDefault();
     const x = this.getAttribute('data-y');
     const y = this.getAttribute('data-x');
 
-    checkShot('playerTwoBoard', [x, y], 'playerTwoShips', this);
-
-    const aiTurn = newGame.aiTurn();
-
-    setTimeout(() => {
-      checkShot(
-        'playerOneBoard',
-        [...aiTurn],
-        'playerOneShips',
-        $.id(`track-area-${aiTurn[0]}-${aiTurn[1]}`)
-      );
-    }, 500);
+    const shotNotTaken = checkShot(
+      'playerTwoBoard',
+      [x, y],
+      'playerTwoShips',
+      this
+    );
+    if (!shotNotTaken) {
+      aiPlay();
+    }
   };
 
   const drawShipToPlace = function(area, xy) {
@@ -179,7 +193,9 @@ export default function() {
           //   newGame.playerOneShips[pickedShip].display[i];
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      return;
+    }
     drawBoardArea('track-area');
   };
   const trackBoardSquareHover = function() {
@@ -224,7 +240,7 @@ export default function() {
 
           const board =
             area === 'play-area' ? 'playerTwoBoard' : 'playerOneBoard';
-          const squareContent = newGame.checkSquare(board, [i, c]);
+          let squareContent = newGame.checkSquare(board, [i, c]);
 
           if (area === 'track-area') {
             div.classList.add('track-board-square');
@@ -247,7 +263,12 @@ export default function() {
 
                 div.classList.add('hit');
               } else {
-                div.textContent = squareContent;
+                squareContent = squareContent.split('-');
+                div.textContent = squareContent[0];
+                div.style.background = 'rgba(30, 200, 50, 0.23)';
+                if (squareContent[2]) {
+                  div.style.transform = 'rotateZ(90deg)';
+                }
               }
             }
           }

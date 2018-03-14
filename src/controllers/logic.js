@@ -1,4 +1,5 @@
 import $ from '../utils/$';
+import brain from './brain';
 
 export default function() {
   return {
@@ -34,8 +35,8 @@ export default function() {
       Carrier: { display: ['<=', '=', '=', '=', '=]'], hits: [], strength: 5 },
       Battleship: { display: ['<<', '[]', '[]', '>>'], hits: [], strength: 4 },
       Cruiser: { display: ['<<', '[]', '>>'], hits: [], strength: 3 },
-      Destroyer_One: { display: ['<[',']>'], hits: [], strength: 2 },
-      Destroyer_Two: { display: ['<[',']>'], hits: [], strength: 2 },
+      Destroyer_One: { display: ['<[', ']>'], hits: [], strength: 2 },
+      Destroyer_Two: { display: ['<[', ']>'], hits: [], strength: 2 },
       Sub_One: { display: ['<^'], hits: [], strength: 1 },
       Sub_Two: { display: ['<^'], hits: [], strength: 1 }
     },
@@ -43,8 +44,8 @@ export default function() {
       Carrier: { display: ['<=', '=', '=', '=', '=]'], hits: [], strength: 5 },
       Battleship: { display: ['<<', '[]', '[]', '>>'], hits: [], strength: 4 },
       Cruiser: { display: ['<<', '[]', '>>'], hits: [], strength: 3 },
-      Destroyer_One: { display: ['<[',']>'], hits: [], strength: 2 },
-      Destroyer_Two: { display: ['<[',']>'], hits: [], strength: 2 },
+      Destroyer_One: { display: ['<[', ']>'], hits: [], strength: 2 },
+      Destroyer_Two: { display: ['<[', ']>'], hits: [], strength: 2 },
       Sub_One: { display: ['<^'], hits: [], strength: 1 },
       Sub_Two: { display: ['<^'], hits: [], strength: 1 }
     },
@@ -59,17 +60,22 @@ export default function() {
       y = +y;
       return this[board][x][y];
     },
-    checkAdjacentSquares: function(board, [x, y]) {
+    checkAdjacentSquares: function(
+      board = 'playerOneBoard',
+      [x, y],
+      direction
+    ) {
       x = +x;
       y = +y;
-      const up = this.checkSquare(board, [x, y - 1]);
-      const down = this.checkSquare(board, [x, y + 1]);
-      const left = this.checkSquare(board, [x - 1, y]);
-      const right = this.checkSquare(board, [x + 1, y]);
-      if (up || down || left || right) {
-        return true;
-      } else {
-        return false;
+      switch (direction) {
+      case 0:
+        return [x, y - 1];
+      case 1:
+        return [x, y + 1];
+      case 2:
+        return [x - 1, y];
+      case 3:
+        return [x + 1, y];
       }
     },
     checkSquareInDirection: function(board, [x, y], direction, ships, ship) {
@@ -123,11 +129,16 @@ export default function() {
 
         if (!direction && shipStrength < 10 - square[1]) {
           for (let i = 0; i < shipStrength; i++) {
-            that[board][square[0]][square[1] + i] = shipName;
+            that[board][square[0]][square[1] + i] = `${
+              that[ships][shipName].display[i]
+            }-${shipName}`; //shipName;
           }
         } else if (direction && shipStrength < 10 - square[0]) {
           for (let i = 0; i < shipStrength; i++) {
-            that[board][square[0] + i][square[1]] = shipName;
+            that[board][square[0] + i][square[1]] = `${
+              that[ships][shipName].display[i]
+            }-${shipName}-${direction}`;
+            //   newGame.playerOneShips[pickedShip].display[i];;
           }
         } else {
           setStartSquare(that, ship, shipName);
@@ -139,14 +150,11 @@ export default function() {
         setStartSquare(this, shipKey, shipKey);
       }
     },
-    aiTurn: function() {
-      let square = this.selectRandomSquare();
-      // while (
-      //   this.checkSquareInDirection('playerOneBoard', [...square])
-      // ) {
-      //   square = this.selectRandomSquare();
-      // }
-      return square;
+    newBrain: brain(),
+    consultBrain: function(x, y) {
+      console.log(this.newBrain);
+      
+      
     }
   };
 }

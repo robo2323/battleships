@@ -11,12 +11,11 @@ const app = function() {
     <div id="paper2">
         <div class="board">
             <div id="track-area" class="divider"></div>
-            <div class="divider">
+            <div class="divider">            
                 <div class="ship-container p1-ship-container">
-                    <button id="place-randomly">Place Randomly</button>
 
                     <div data-ship="Carrier" data-placed="false" id="carrier" class="ship clickable current-ship-selected">
-                    <p>Carrier</p>
+                    <p>Carrier...................</p>
                     <div class="stern"><=</div>
                     <div>=</div>
                     <div>=</div>
@@ -24,7 +23,7 @@ const app = function() {
                     <div class="bow">=]</div>
                     </div>
                     <div data-ship="Battleship" data-placed="false" id="battleship" class="ship clickable">
-                    <p>Battleship</p>
+                    <p>Battleship.....................</p>
                     
                         <div class="stern"><<</div>
                         <div>[]</div>
@@ -32,7 +31,8 @@ const app = function() {
                         <div class="bow">>></div>
                     </div>
                     <div data-ship="Cruiser" data-placed="false" id="cruiser" class="ship clickable">
-                    <p>Cruiser</p>
+                    
+                    <p>Cruiser..................................</p>
                     
                     <div class="stern"><<</div>
                     <div>[]</div>
@@ -40,7 +40,7 @@ const app = function() {
                     </div>
                     
                     <div data-ship="Destroyer_One" data-placed="false" id="destroyer-one" class="ship clickable">
-                    <p>Destroyers</p>                    
+                    <p>Destroyers..........</p>                    
                     
                     <div class="stern"><[</div>
                     <div class="bow">]></div>
@@ -50,7 +50,7 @@ const app = function() {
                     <div class="bow">]></div>
                     </div>
                     <div data-ship="Sub_One" data-placed="false" id="sub-one" class="ship clickable">
-                    <p>Subs</p>
+                    <p>Subs..................................</p>
                     
                         <div class="bow stern"><^</div>
                     </div>
@@ -63,6 +63,8 @@ const app = function() {
             </div>
             <!--end  p1-ship-area/divider-->
             <div class="divider">
+            <button id="place-randomly">Place Randomly</button>
+            
             <h1>Battleships!</h1>
             </div>
             <div id="play-area" class="divider"></div>
