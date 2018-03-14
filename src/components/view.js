@@ -1,4 +1,4 @@
-//TODO:  get enemy ships to display once destroyed, win/lose state - display and tehn reset player ships , AI, salvos
+//TODO:  get enemy ships to display once destroyed, win/lose state - display and tehn reset player ships , AI, salvos, dont allow game to start until ships placed, highlight each players turn
 /*globals $*/
 import $ from '../utils/$';
 import Game from '../controllers/logic';
@@ -46,19 +46,17 @@ export default function() {
           let x = placedShipSquares[i].getAttribute('data-y');
           let y = placedShipSquares[i].getAttribute('data-x');
 
-          // placedShipSquares[i].classList.add('placed-ship');
-
           newGame.playerOneBoard[x][y] = `${
             newGame.playerOneShips[pickedShip].display[i]
-          }-${pickedShip}${direction && '-rot'}`;
+          }-${pickedShip}${direction?'-rot':''}`;
           drawBoardArea('track-area');
         }
         if (
-          document.querySelectorAll('.ship[data-placed="false"]').length > 0
+          document.querySelectorAll('.ship[data-placed="false"]').length > 1
         ) {
           playerShip.setAttribute('data-placed', 'true');
           playerShip.classList.remove('clickable');
-          playerShip.style.opacity = '0.2';
+          playerShip.style.opacity = '0.4';
 
           if (pickedShip !== 'Sub_Two') {
             const newPickedShip = playerShip.nextElementSibling;
@@ -70,6 +68,10 @@ export default function() {
           }
           clicked = !clicked;
         } else {
+          removeClass(
+            document.querySelectorAll('.track-board-square'),
+            'placing-ship'
+          );
           clicked = false;
           clickable = false;
         }
@@ -137,16 +139,15 @@ export default function() {
     const x = aiTurn[0];
     const y = aiTurn[1];
 
-    setTimeout(() => {
-      const shot = checkShot(
-        'playerOneBoard',
-        [...aiTurn],
-        'playerOneShips',
-        $.id(`track-area-${x}-${y}`)
-      );
-      newGame.consultBrain();
-    }, 500);
+    const shot = checkShot(
+      'playerOneBoard',
+      [...aiTurn],
+      'playerOneShips',
+      $.id(`track-area-${x}-${y}`)
+    );
+    newGame.consultBrain();
   };
+
   // make a shot/guess
   const playBoardSquareClick = function(e) {
     e.preventDefault();
@@ -159,8 +160,18 @@ export default function() {
       'playerTwoShips',
       this
     );
-    if (!shotNotTaken) {
-      aiPlay();
+    if (!shotNotTaken && newGame.pOneShotsLeft === 1) {
+      newGame.pTwoShotsLeft = 7 - newGame.pTwoSunkShips;
+
+      for (let i = 0; i < newGame.pTwoShotsLeft; i++) {
+        const thinkingTime = Math.floor(Math.random() * (2500 - 500 + 1) + 500);
+        setTimeout(() => {
+          aiPlay();
+        }, thinkingTime);
+      }
+      newGame.pOneShotsLeft = 7 - newGame.pOneSunkShips;
+    } else {
+      newGame.pOneShotsLeft--;
     }
   };
 

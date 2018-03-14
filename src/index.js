@@ -77,8 +77,7 @@ const app = function() {
     <div id="paper6"></div>
 
 
-</div>
-`;
+  </div>`;
   return component;
 };
 

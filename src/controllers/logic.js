@@ -51,6 +51,8 @@ export default function() {
     },
     pOneSunkShips:0,
     pTwoSunkShips:0,
+    pOneShotsLeft:7,
+    pTwoShotsLeft:7,
     pOneScore:0,
     pTwoScore:0,
     selectRandomSquare: function() {
