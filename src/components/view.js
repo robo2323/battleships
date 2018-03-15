@@ -1,4 +1,4 @@
-//TODO:  get enemy ships to display once destroyed, win/lose state - display and tehn reset player ships , AI
+//TODO:  get enemy ships to display once destroyed,  AI
 /*globals $*/
 import $ from '../utils/$';
 import Game from '../controllers/logic';
@@ -120,12 +120,10 @@ export default function() {
 
     if ((square === 'X' || square === '/') && board === 'playerOneBoard') {
       if (newGame.consultBrain().hit) {
-        // newGame.updateBrain('hit',false);
         newGame.updateBrain(
           'currentDirection',
           newGame.consultBrain().currentDirection + 1
         );
-        // newGame.updateBrain('hitSquare', []);
       }
       aiPlay();
       return;
@@ -134,7 +132,6 @@ export default function() {
     }
 
     const shot = newGame.checkSquare(board, [x, y]);
-    
 
     if (shot) {
       if (board === 'playerOneBoard') {
@@ -169,15 +166,13 @@ export default function() {
       } else {
         newGame.pOneScore++;
         if (newGame.pOneScore === 18) {
-          // drawBoardArea('play-area');
-          // drawBoardArea('track-area');
           $.id('game-message').textContent = `You Won in ${
             newGame.pOneMoves
           } moves! Click Anywhere to play again.`;
           play = false;
-          document.addEventListener('click', clickAnywhere);
-
-          //newGame = startNewGame();
+          setTimeout(() => {
+            document.addEventListener('click', clickAnywhere);
+          }, 1000);
         }
       }
     } else {
@@ -189,7 +184,6 @@ export default function() {
       : drawBoardArea('track-area');
   };
   const aiPlay = function() {
-    // $.id('game-message').textContent = "Computer's turn...";
     let aiTurn;
     let x;
     let y;
@@ -242,9 +236,10 @@ export default function() {
       return;
     }
     if (play) {
-      $.id('game-message').textContent = `Your turn...${newGame.pOneShotsLeft-1} shots left`;
+      $.id('game-message').textContent = `Your turn...${newGame.pOneShotsLeft -
+        1} shots left`;
     }
-    
+
     $.id('place-randomly').removeEventListener('click', placeRandomly);
     e.preventDefault();
     let shotNotTaken;
@@ -308,19 +303,11 @@ export default function() {
       if (relativeShipLengthY > 9 && relativeShipLengthX > 9) {
         if (!direction) {
           for (let i = 0; i < pickedShipLength; i++) {
-            // $.id(`${area}-${x}-${y - i}`).classList.add('placing-ship');
-
             newGame.pOneStyles.push([x, y - i, 'placing-ship']);
-            // newGame.playerOneBoard[x][y - i] =
-            //   newGame.playerOneShips[pickedShip].display[i];
           }
         } else if (direction) {
           for (let i = 0; i < pickedShipLength; i++) {
-            // $.id(`${area}-${x - i}-${y}`).classList.add('placing-ship');
-
             newGame.pOneStyles.push([x - i, y, 'placing-ship']);
-            // newGame.playerOneBoard[x - i][y] =
-            //   newGame.playerOneShips[pickedShip].display[i];
           }
         }
       } else if (!direction) {
@@ -330,11 +317,7 @@ export default function() {
           direction = !direction;
         }
         for (let i = 0; i < pickedShipLength; i++) {
-          // $.id(`${area}-${x}-${y + i}`).classList.add('placing-ship');
-
           newGame.pOneStyles.push([x, y + i, 'placing-ship']);
-          // newGame.playerOneBoard[x][y + i] =
-          //   newGame.playerOneShips[pickedShip].display[i];
         }
       } else if (direction) {
         if (!direction && relativeShipLengthY > 9) {
@@ -343,11 +326,7 @@ export default function() {
           direction = !direction;
         }
         for (let i = 0; i < pickedShipLength; i++) {
-          // $.id(`${area}-${x + i}-${y}`).classList.add('placing-ship');
-
           newGame.pOneStyles.push([x + i, y, 'placing-ship']);
-          // newGame.playerOneBoard[x + i][y] =
-          //   newGame.playerOneShips[pickedShip].display[i];
         }
       }
     } catch (err) {
@@ -359,8 +338,6 @@ export default function() {
     if (clicked) {
       const area = this.getAttribute('data-area');
       const xy = getXY(this);
-
-      // this.classList.add('placing-ship');
 
       drawShipToPlace(area, xy);
     }

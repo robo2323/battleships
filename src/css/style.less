@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 @import url('https://fonts.googleapis.com/css?family=Nanum+Brush+Script');
 
-@blue: rgb(89, 131, 194);
-@green: rgb(0, 190, 101);
-@red: rgb(255, 72, 0);
+@blue: rgb(55, 124, 165);
+@green: rgb(54, 181, 116);
+@red: rgb(245, 81, 31);
 @black: rgb(32, 83, 68);
 @offwhite: #f3f3e9;
 @white: #fdfdfb;
@@ -131,24 +130,24 @@ body {
     height: 70px;
     background: transparent;
     border: 2px dashed @black;
-    border-radius: 8%;
+    border-radius: 40%;
     font-family: 'Nanum Brush Script', cursive;
     margin: 10px;
     left: 10%;
     padding: 5px;
     font-size: 30px;
+    color: @red;
     .clickable;
     &:hover {
       border: 2px solid @blue;
-      background: rgba(30, 143, 255, 0.199);
     }
   }
 }
 
 .area-mixin {
   display: grid;
-  grid-template-columns: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
-  grid-template-rows: 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09% 9.09%;
+  grid-template-columns: 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909%;
+  grid-template-rows: 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909%;
   grid-auto-flow: row;
   border: 2px solid @black;
   color: @black;
@@ -186,9 +185,9 @@ body {
   font-size: 65px;
 
   &:hover {
-    border: 1px solid tomato;
-    transform: scale(1.2);
-    background: rgba(255, 99, 71, 0.363);
+    border: 1px solid @red;
+    // transform: scale(1.2);
+    background: rgba(245, 81, 31, 0.582);
   }
 }
 .track-board-square {
@@ -229,14 +228,14 @@ body {
 }
 
 .placing-ship {
-  background: rgb(110, 209, 110);
+  background: @green;
   opacity: 0.2;
   border: 1px dashed @blue;
 }
 
 .placed-ship {
   opacity: 1;
-  // background:rgba(30, 162, 255, 0.23);
+  background: @green;
 }
 
 .current-ship-selected {
@@ -264,7 +263,11 @@ body {
     text-align: center;
     height: 150px;
     font-size: 45px;
+    color: @green;
+  }
+  h1 {
     color: @red;
+    text-decoration: underline solid @blue;
   }
 }
 .placed-selected-ship {

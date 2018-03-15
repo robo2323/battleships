@@ -63,7 +63,7 @@ const app = function() {
             </div>
             <!--end  p1-ship-area/divider-->
             <div id="game-info" class="divider">
-            <button id="place-randomly">Place Ships Randomly</button>
+            <button id="place-randomly">>Place Ships Randomly<</button>
             <p id="game-message">
                 Place all your ships on the board above or click "Place Ships Randomly" 
             </p>
