@@ -55,6 +55,8 @@ export default function() {
     pTwoShotsLeft: 7,
     pOneScore: 0,
     pTwoScore: 0,
+    pOneMoves:0,
+    pTwoMoves:0,
     selectRandomSquare: function() {
       const x = Math.floor(Math.random() * 10) + 1;
       const y = Math.floor(Math.random() * 10) + 1;
@@ -76,15 +78,16 @@ export default function() {
       const down = y + 1 < 10 ? y + 1 : 10;
       const left = x - 1 > 1 ? x - 1 : 1;
       const right = x + 1 < 10 ? x + 1 : 10;
+
       switch (direction) {
       case 0:
         return [x, up];
       case 1:
         return [x, down];
       case 2:
-        return [x - left];
+        return [left, y];
       case 3:
-        return [x + right];
+        return [right, y];
       }
     },
     checkSquareInDirection: function(board, [x, y], direction, ships, ship) {

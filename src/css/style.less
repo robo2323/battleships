@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 @import url('https://fonts.googleapis.com/css?family=Nanum+Brush+Script');
 
-@blue: rgb(120, 125, 207);
+@blue: rgb(89, 131, 194);
 @green: rgb(0, 190, 101);
 @red: rgb(255, 72, 0);
 @black: rgb(32, 83, 68);
@@ -127,9 +127,8 @@ body {
   grid-auto-flow: row;
 }
 .divider {
-
   button {
-    height: 70px;  
+    height: 70px;
     background: transparent;
     border: 2px dashed @black;
     border-radius: 8%;
@@ -139,10 +138,9 @@ body {
     padding: 5px;
     font-size: 30px;
     .clickable;
-    &:hover{
-    border: 2px solid @blue;
-    background: rgba(30, 143, 255, 0.199);
-      
+    &:hover {
+      border: 2px solid @blue;
+      background: rgba(30, 143, 255, 0.199);
     }
   }
 }
@@ -167,9 +165,8 @@ body {
 
 #track-area {
   .area-mixin;
-  .board-square{
-  border: 1px dashed @blue;
-    
+  .board-square {
+    border: 1px dashed @blue;
   }
 }
 .board-square {
@@ -179,10 +176,9 @@ body {
 #play-area {
   .area-mixin;
   border-radius: 0 0 10px 0;
-  
-  .board-square{
-  border: 1px dashed @green;
-    
+
+  .board-square {
+    border: 1px dashed @green;
   }
 }
 
@@ -212,7 +208,7 @@ body {
   display: flex;
   flex-direction: row;
   margin: 20px;
- 
+
   p {
     font-size: 25px;
     line-height: 60px;
@@ -229,7 +225,6 @@ body {
     height: 30.76px;
     text-decoration: underline;
     padding: 0 4px 0 4px;
-    
   }
 }
 
@@ -247,7 +242,7 @@ body {
 .current-ship-selected {
   div {
     transform: scale(1.3);
-    color: @red;
+    color: @blue;
   }
 }
 
@@ -257,19 +252,22 @@ body {
 }
 .miss {
   color: @black;
-  background: dodgerblue
+  background: dodgerblue;
 }
 
-
-#game-info{
+#game-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  p{
+  p {
     text-align: center;
     height: 150px;
     font-size: 45px;
+    color: @red;
   }
-
+}
+.placed-selected-ship {
+  opacity: 0.5;
+  color: @green;
 }

@@ -14,9 +14,22 @@ export default function() {
     pickedShip = 'Carrier';
   // draw blue lines on paper
   renderLines();
+
   const startNewGame = function() {
     let newGame = new Game();
     newGame.setBoard();
+
+    const ships = document.querySelectorAll('.ship[data-placed="true"]');
+    for (let i = 0; i < ships.length; i++) {
+      ships[i].classList.remove('placed-selected-ship');
+      ships[i].classList.add('clickable');
+      ships[i].setAttribute('data-placed', 'false');
+      ships[i].addEventListener('click', clickPlayerShipHandeler);
+      $.id('game-message').textContent =
+        'Place all your ships on the board above or click "Place Ships Randomly"';
+
+      console.log(ships[i].classList);
+    }
     return newGame;
   };
   let newGame = startNewGame();
@@ -56,8 +69,8 @@ export default function() {
           document.querySelectorAll('.ship[data-placed="false"]').length > 1
         ) {
           playerShip.setAttribute('data-placed', 'true');
-          playerShip.classList.remove('clickable');
-          playerShip.style.opacity = '0.4';
+          playerShip.classList.remove('clickable', 'current-ship-selected');
+          playerShip.classList.add('placed-selected-ship');
 
           if (pickedShip !== 'Sub_Two') {
             const newPickedShip = playerShip.nextElementSibling;
@@ -65,6 +78,7 @@ export default function() {
 
             if (placed) {
               pickedShip = newPickedShip.getAttribute('data-ship');
+              newPickedShip.classList.add('current-ship-selected');
             }
           }
           clicked = !clicked;
@@ -85,7 +99,19 @@ export default function() {
     }
     console.log(newGame);
   };
+  const clickAnywhere = function(e) {
+    e.preventDefault();
+    clicked = true;
+    clickable = true;
+    play = false;
+    direction = false;
+    pickedShip = 'Carrier';
+    newGame = startNewGame();
+    drawBoardArea('play-area');
+    drawBoardArea('track-area');
 
+    document.removeEventListener('click', clickAnywhere);
+  };
   const checkShot = function(board, [x, y], ships, that) {
     x = +x;
     y = +y;
@@ -95,22 +121,26 @@ export default function() {
     if ((square === 'X' || square === '/') && board === 'playerOneBoard') {
       if (newGame.consultBrain().hit) {
         // newGame.updateBrain('hit',false);
-        newGame.updateBrain('currentDirection', newGame.consultBrain().currentDirection + 1);
+        newGame.updateBrain(
+          'currentDirection',
+          newGame.consultBrain().currentDirection + 1
+        );
         // newGame.updateBrain('hitSquare', []);
       }
       aiPlay();
+      return;
     } else if (square === 'X' || square === '/') {
       return true;
     }
 
     const shot = newGame.checkSquare(board, [x, y]);
-    $.id('game-message').textContent = `Your turn...${newGame.pOneShotsLeft -
-      1} shots left`;
+    
 
     if (shot) {
       if (board === 'playerOneBoard') {
         newGame.updateBrain('hit', true);
         newGame.updateBrain('hitSquare', [x, y]);
+        newGame.updateBrain('currentDirection', 0);
       }
       const ship = newGame[ships][square.split('-')[1]];
 
@@ -128,23 +158,25 @@ export default function() {
       newGame[board][x][y] = 'X';
       if (board === 'playerOneBoard') {
         newGame.pTwoScore++;
-        if (newGame.pTwoScore === 18) {
-          $.id('game-message').textContent =
-            'The Computer Won! Click Anywhere to play again.';
-          play = false;
 
-          // drawBoardArea('play-area');
-          // drawBoardArea('track-area');
-          //newGame = startNewGame();
+        if (newGame.pTwoScore === 18) {
+          $.id('game-message').textContent = `The Computer Won in ${
+            newGame.pTwoMoves
+          } moves! Click Anywhere to play again.`;
+          play = false;
+          document.addEventListener('click', clickAnywhere);
         }
       } else {
         newGame.pOneScore++;
         if (newGame.pOneScore === 18) {
           // drawBoardArea('play-area');
           // drawBoardArea('track-area');
-          $.id('game-message').textContent =
-            'You Won! Click Anywhere to play again.';
+          $.id('game-message').textContent = `You Won in ${
+            newGame.pOneMoves
+          } moves! Click Anywhere to play again.`;
           play = false;
+          document.addEventListener('click', clickAnywhere);
+
           //newGame = startNewGame();
         }
       }
@@ -174,6 +206,14 @@ export default function() {
         newGame.consultBrain().hitSquare,
         newGame.consultBrain().currentDirection
       );
+      if (!aiTurn) {
+        aiTurn = newGame.selectRandomSquare();
+      }
+      x = aiTurn[0];
+      y = aiTurn[1];
+    }
+    if (!aiTurn) {
+      aiTurn = newGame.selectRandomSquare();
       x = aiTurn[0];
       y = aiTurn[1];
     }
@@ -201,7 +241,10 @@ export default function() {
     if (!play) {
       return;
     }
-
+    if (play) {
+      $.id('game-message').textContent = `Your turn...${newGame.pOneShotsLeft-1} shots left`;
+    }
+    
     $.id('place-randomly').removeEventListener('click', placeRandomly);
     e.preventDefault();
     let shotNotTaken;
@@ -228,20 +271,26 @@ export default function() {
         setTimeout(() => {
           aiPlay();
         }, thinkingTime);
+        newGame.pTwoMoves++;
       }
+
       aiTime = aiTime / shotsTaken + 500;
       setTimeout(() => {
         for (let i = 0; i < squares.length; i++) {
           squares[i].addEventListener('click', playBoardSquareClick);
-          $.id('game-message').textContent = `Your turn...${
-            newGame.pOneShotsLeft
-          } shots left`;
+
+          if (play) {
+            $.id('game-message').textContent = `Your turn...${
+              newGame.pOneShotsLeft
+            } shots left`;
+          }
         }
       }, aiTime + 100);
 
       newGame.pOneShotsLeft = 7 - newGame.pOneSunkShips || 1;
     } else if (!shotNotTaken) {
       newGame.pOneShotsLeft--;
+      newGame.pOneMoves++;
     }
   };
 
@@ -431,7 +480,7 @@ export default function() {
     for (let i = 0; i < playerShips.length; i++) {
       playerShips[i].setAttribute('data-placed', 'true');
       playerShips[i].classList.remove('clickable');
-      playerShips[i].style.opacity = '0.2';
+      playerShips[i].classList.add('placed-selected-ship');
       playerShips[i].removeEventListener('click', clickPlayerShipHandeler);
     }
     play = true;
