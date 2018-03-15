@@ -1,4 +1,4 @@
-//TODO:  get enemy ships to display once destroyed,  AI
+//TODO:  get enemy ships to display once destroyed,  AI, different game modes, alternate players start
 /*globals $*/
 import $ from '../utils/$';
 import Game from '../controllers/logic';
@@ -33,6 +33,8 @@ export default function() {
     return newGame;
   };
   let newGame = startNewGame();
+  console.log(newGame.playerTwoBoard);
+
   const trackBoardSquareClick = function(e) {
     e.preventDefault();
 
@@ -236,8 +238,12 @@ export default function() {
       return;
     }
     if (play) {
-      $.id('game-message').textContent = `Your turn...${newGame.pOneShotsLeft -
-        1} shots left`;
+      const shots = newGame.pOneShotsLeft - 1;
+      $.id(
+        'game-message'
+      ).innerHTML = `<em>Your turn</em>...You have <em><strong>${shots}</strong> shot${
+        shots < 2 ? '' : 's'
+      }</em> left`;
     }
 
     $.id('place-randomly').removeEventListener('click', placeRandomly);
@@ -256,28 +262,33 @@ export default function() {
       }
       newGame.pTwoShotsLeft = 7 - newGame.pTwoSunkShips || 1;
       const shotsTaken = newGame.pTwoShotsLeft;
-      let aiTime = 0;
 
+      let thinkingTime = Math.floor(Math.random() * (500 - 100 + 1) + 100);
+      let aiTime = thinkingTime;
       for (let i = 0; i < newGame.pTwoShotsLeft; i++) {
-        const thinkingTime = Math.floor(Math.random() * (2500 - 500 + 1) + 500);
-        aiTime += thinkingTime;
-        $.id('game-message').textContent = "Computer's Turn...";
+        $.id('game-message').innerHTML = "<em>Computer's Turn</em>...";
 
         setTimeout(() => {
           aiPlay();
         }, thinkingTime);
+        thinkingTime =
+          thinkingTime + Math.floor(Math.random() * (500 - 100 + 1) + 100);
+        aiTime += thinkingTime;
+
         newGame.pTwoMoves++;
       }
 
-      aiTime = aiTime / shotsTaken + 500;
+      aiTime = aiTime / (shotsTaken - 2);
       setTimeout(() => {
         for (let i = 0; i < squares.length; i++) {
           squares[i].addEventListener('click', playBoardSquareClick);
 
           if (play) {
-            $.id('game-message').textContent = `Your turn...${
+            $.id(
+              'game-message'
+            ).innerHTML = `<em>Your turn</em>...You have <em>${
               newGame.pOneShotsLeft
-            } shots left`;
+            } shots</em> left`;
           }
         }
       }, aiTime + 100);

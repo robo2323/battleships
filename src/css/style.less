@@ -11,7 +11,7 @@ html,
 body {
   height: 100%;
   width: 100%;
-  background: url('../img/Melamine-wood-003.png');
+  background: url('../img/dark-wood.jpg');
   overflow: hidden;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -25,7 +25,7 @@ body {
 }
 
 .clickable {
-  cursor: pointer;
+  cursor: crosshair;
   transition: all 0.3s;
 }
 .faded {
@@ -34,7 +34,7 @@ body {
 
 #paper-container {
   position: relative;
-  margin: 40px auto;
+  margin: 20px auto;
   width: 800px;
   height: 900px;
   background: @white;
@@ -44,7 +44,7 @@ body {
 }
 
 #paper1 {
-  border-top: 18px dotted rgb(202, 153, 90);
+  border-top: 20px dotted rgb(120, 76, 43);
   border-radius: 0 0 10px 10px;
   position: absolute;
   margin: -3.4% auto;
@@ -61,8 +61,8 @@ body {
   width: 800px;
   height: 900px;
   background: @offwhite;
+  box-shadow: 0 4px 4px rgba(17, 17, 17, 0.76);
   border-radius: 0 0 10px 10px;
-  box-shadow: 0 0 4px #111;
   z-index: -1;
 }
 
@@ -132,7 +132,6 @@ body {
     border: 2px dashed @black;
     border-radius: 40%;
     font-family: 'Nanum Brush Script', cursive;
-    margin: 10px;
     left: 10%;
     padding: 5px;
     font-size: 30px;
@@ -258,16 +257,25 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
   padding: 10px;
   p {
     text-align: center;
-    height: 150px;
-    font-size: 45px;
-    color: @green;
+    font-size: 48px;
+    color: @blue;
+    margin: 0;
+    height: 250px;
+  
+    em{
+      text-decoration: underline solid @blue;
+      color: @red;
+      
+    }
   }
   h1 {
     color: @red;
     text-decoration: underline solid @blue;
+    margin: 0;
   }
 }
 .placed-selected-ship {
