@@ -1,4 +1,4 @@
-//TODO:  get enemy ships to display once destroyed, win/lose state - display and tehn reset player ships , AI, salvos, dont allow game to start until ships placed, highlight each players turn
+//TODO:  get enemy ships to display once destroyed, win/lose state - display and tehn reset player ships , AI
 /*globals $*/
 import $ from '../utils/$';
 import Game from '../controllers/logic';
@@ -9,6 +9,7 @@ import removeClass from './removeClass';
 export default function() {
   let clicked = true,
     clickable = true,
+    play = false,
     direction = false,
     pickedShip = 'Carrier';
   // draw blue lines on paper
@@ -48,7 +49,7 @@ export default function() {
 
           newGame.playerOneBoard[x][y] = `${
             newGame.playerOneShips[pickedShip].display[i]
-          }-${pickedShip}${direction?'-rot':''}`;
+          }-${pickedShip}${direction ? '-rot' : ''}`;
           drawBoardArea('track-area');
         }
         if (
@@ -74,7 +75,12 @@ export default function() {
           );
           clicked = false;
           clickable = false;
+          play = true;
+
+          $.id('game-message').textContent = 'Your turn...';
         }
+      } else {
+        clicked = true;
       }
     }
     console.log(newGame);
@@ -86,15 +92,26 @@ export default function() {
 
     const square = newGame[board][x][y];
 
-    if (square === 'X' || (square === '/' && board === 'playerOneBoard')) {
+    if ((square === 'X' || square === '/') && board === 'playerOneBoard') {
+      if (newGame.consultBrain().hit) {
+        // newGame.updateBrain('hit',false);
+        newGame.updateBrain('currentDirection', newGame.consultBrain().currentDirection + 1);
+        // newGame.updateBrain('hitSquare', []);
+      }
       aiPlay();
     } else if (square === 'X' || square === '/') {
       return true;
     }
 
     const shot = newGame.checkSquare(board, [x, y]);
+    $.id('game-message').textContent = `Your turn...${newGame.pOneShotsLeft -
+      1} shots left`;
 
     if (shot) {
+      if (board === 'playerOneBoard') {
+        newGame.updateBrain('hit', true);
+        newGame.updateBrain('hitSquare', [x, y]);
+      }
       const ship = newGame[ships][square.split('-')[1]];
 
       ship.hits.push(x, y);
@@ -112,18 +129,23 @@ export default function() {
       if (board === 'playerOneBoard') {
         newGame.pTwoScore++;
         if (newGame.pTwoScore === 18) {
-          console.log('computer wins');
-          drawBoardArea('play-area');
-          drawBoardArea('track-area');
-          newGame = startNewGame();
+          $.id('game-message').textContent =
+            'The Computer Won! Click Anywhere to play again.';
+          play = false;
+
+          // drawBoardArea('play-area');
+          // drawBoardArea('track-area');
+          //newGame = startNewGame();
         }
       } else {
         newGame.pOneScore++;
         if (newGame.pOneScore === 18) {
-          drawBoardArea('play-area');
-          drawBoardArea('track-area');
-          console.log('you win!');
-          newGame = startNewGame();
+          // drawBoardArea('play-area');
+          // drawBoardArea('track-area');
+          $.id('game-message').textContent =
+            'You Won! Click Anywhere to play again.';
+          play = false;
+          //newGame = startNewGame();
         }
       }
     } else {
@@ -135,9 +157,26 @@ export default function() {
       : drawBoardArea('track-area');
   };
   const aiPlay = function() {
-    let aiTurn = newGame.selectRandomSquare();
-    const x = aiTurn[0];
-    const y = aiTurn[1];
+    // $.id('game-message').textContent = "Computer's turn...";
+    let aiTurn;
+    let x;
+    let y;
+
+    if (!newGame.consultBrain().hit) {
+      aiTurn = newGame.selectRandomSquare();
+      x = aiTurn[0];
+      y = aiTurn[1];
+    } else if (
+      newGame.consultBrain().hit &&
+      newGame.consultBrain().currentDirection < 4
+    ) {
+      aiTurn = newGame.checkAdjacentSquares(
+        newGame.consultBrain().hitSquare,
+        newGame.consultBrain().currentDirection
+      );
+      x = aiTurn[0];
+      y = aiTurn[1];
+    }
 
     const shot = checkShot(
       'playerOneBoard',
@@ -145,32 +184,63 @@ export default function() {
       'playerOneShips',
       $.id(`track-area-${x}-${y}`)
     );
-    newGame.consultBrain();
+    if (newGame.consultBrain().hit) {
+      if (newGame.consultBrain().currentDirection === 3) {
+        newGame.updateBrain('currentDirection', 0);
+        newGame.updateBrain('hit', false);
+        newGame.updateBrain('hitSquare', []);
+      } else {
+        const newDirection = newGame.consultBrain().currentDirection + 1;
+        newGame.updateBrain('currentDirection', newDirection);
+      }
+    }
   };
 
   // make a shot/guess
   const playBoardSquareClick = function(e) {
+    if (!play) {
+      return;
+    }
+
+    $.id('place-randomly').removeEventListener('click', placeRandomly);
     e.preventDefault();
+    let shotNotTaken;
+
     const x = this.getAttribute('data-y');
     const y = this.getAttribute('data-x');
 
-    const shotNotTaken = checkShot(
-      'playerTwoBoard',
-      [x, y],
-      'playerTwoShips',
-      this
-    );
-    if (!shotNotTaken && newGame.pOneShotsLeft === 1) {
-      newGame.pTwoShotsLeft = 7 - newGame.pTwoSunkShips;
+    shotNotTaken = checkShot('playerTwoBoard', [x, y], 'playerTwoShips', this);
+
+    if (!shotNotTaken && newGame.pOneShotsLeft === 1 && play) {
+      const squares = document.querySelectorAll('#play-area > div');
+      for (let i = 0; i < squares.length; i++) {
+        squares[i].removeEventListener('click', playBoardSquareClick);
+      }
+      newGame.pTwoShotsLeft = 7 - newGame.pTwoSunkShips || 1;
+      const shotsTaken = newGame.pTwoShotsLeft;
+      let aiTime = 0;
 
       for (let i = 0; i < newGame.pTwoShotsLeft; i++) {
         const thinkingTime = Math.floor(Math.random() * (2500 - 500 + 1) + 500);
+        aiTime += thinkingTime;
+        $.id('game-message').textContent = "Computer's Turn...";
+
         setTimeout(() => {
           aiPlay();
         }, thinkingTime);
       }
-      newGame.pOneShotsLeft = 7 - newGame.pOneSunkShips;
-    } else {
+      aiTime = aiTime / shotsTaken + 500;
+      setTimeout(() => {
+        for (let i = 0; i < squares.length; i++) {
+          squares[i].addEventListener('click', playBoardSquareClick);
+          $.id('game-message').textContent = `Your turn...${
+            newGame.pOneShotsLeft
+          } shots left`;
+        }
+      }, aiTime + 100);
+
+      newGame.pOneShotsLeft = 7 - newGame.pOneSunkShips || 1;
+    } else if (!shotNotTaken) {
       newGame.pOneShotsLeft--;
     }
   };
@@ -303,7 +373,7 @@ export default function() {
               } else {
                 squareContent = squareContent.split('-');
                 div.textContent = squareContent[0];
-                div.style.background = 'rgba(30, 200, 50, 0.23)';
+                div.style.background = 'rgba(20, 200, 100, 0.9)';
                 if (squareContent[2]) {
                   div.style.transform = 'rotateZ(90deg)';
                 }
@@ -352,7 +422,7 @@ export default function() {
   document.addEventListener('keydown', () => {
     direction = !direction;
   });
-  document.querySelector('#place-randomly').addEventListener('click', () => {
+  const placeRandomly = () => {
     newGame.setBoard('playerOneBoard', 'playerOneShips');
     clicked = false;
     clickable = false;
@@ -364,7 +434,12 @@ export default function() {
       playerShips[i].style.opacity = '0.2';
       playerShips[i].removeEventListener('click', clickPlayerShipHandeler);
     }
+    play = true;
+    $.id('game-message').textContent = 'Your turn...';
 
     drawBoardArea('track-area');
-  });
+  };
+  document
+    .querySelector('#place-randomly')
+    .addEventListener('click', placeRandomly);
 }

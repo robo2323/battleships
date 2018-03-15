@@ -16,7 +16,7 @@ const app = function() {
 
                     <div data-ship="Carrier" data-placed="false" id="carrier" class="ship clickable current-ship-selected">
                     <p>Carrier...................</p>
-                    <div class="stern"><=</div>
+                    <div class="stern">&#x3C=</div>
                     <div>=</div>
                     <div>=</div>
                     <div>=</div>
@@ -62,8 +62,11 @@ const app = function() {
                 <!--end  p1-ship container-->
             </div>
             <!--end  p1-ship-area/divider-->
-            <div class="divider">
-            <button id="place-randomly">Place Randomly</button>
+            <div id="game-info" class="divider">
+            <button id="place-randomly">Place Ships Randomly</button>
+            <p id="game-message">
+                Place all your ships on the board above or click "Place Ships Randomly" 
+            </p>
             
             <h1>Battleships!</h1>
             </div>

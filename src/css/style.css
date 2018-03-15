@@ -14,11 +14,10 @@ body {
   user-select: none;
   font-family: 'Nanum Brush Script', cursive;
   font-size: 1.5rem;
-  box-sizing: border-box;
 }
 .clickable {
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 .faded {
   opacity: 0.2;
@@ -40,7 +39,7 @@ body {
   margin: -3.4% auto;
   width: 800px;
   height: 100px;
-  background: #fdfdfb;
+  background: #f3f3e9;
   border-radius: 3px;
   z-index: -1;
 }
@@ -49,7 +48,7 @@ body {
   margin: auto;
   width: 800px;
   height: 900px;
-  background: #fdfdfb;
+  background: #f3f3e9;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 4px #111;
   z-index: -1;
@@ -59,7 +58,7 @@ body {
   margin: -4px auto;
   width: 800px;
   height: 900px;
-  background: #f6f6ef;
+  background: #f3f3e9;
   border-top: 5px dotted white;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 4px #111;
@@ -82,7 +81,7 @@ body {
   margin: auto;
   width: 800px;
   height: 900px;
-  background: #f6f6ef;
+  background: #f3f3e9;
   border-radius: 0 0 10px 10px;
   box-shadow: 2px 2px 5px #111;
   transform: rotate(-4deg);
@@ -94,7 +93,7 @@ body {
   top: 0.8%;
   width: 800px;
   height: 800px;
-  background: #f6f6ef;
+  background: #f3f3e9;
   border-radius: 0 0 10px 10px;
   box-shadow: 1px 1px 5px #111;
   transform: rotate(-5deg);
@@ -109,16 +108,7 @@ body {
   grid-template-rows: 40% 60%;
   grid-auto-flow: row;
 }
-.divider {
-  background: transparent;
-  display: flex;
-}
-.divider h1 {
-  transform: rotateZ(-90deg);
-  margin: 30% auto;
-}
 .divider button {
-  position: absolute;
   height: 70px;
   background: transparent;
   border: 2px dashed #205344;
@@ -129,7 +119,7 @@ body {
   padding: 5px;
   font-size: 30px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 .divider button:hover {
   border: 2px solid #787dcf;
@@ -172,15 +162,16 @@ body {
   grid-auto-flow: row;
   border: 2px solid #205344;
   color: #205344;
+  border-radius: 0 0 10px 0;
 }
 #play-area .board-square {
-  border: 2px dashed #00be49;
+  border: 1px dashed #00be65;
 }
 .play-board-square {
   font-size: 65px;
 }
 .play-board-square:hover {
-  border: 2px solid tomato;
+  border: 1px solid tomato;
   transform: scale(1.2);
   background: rgba(255, 99, 71, 0.363);
 }
@@ -191,12 +182,11 @@ body {
 .ship-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: flex-start;
   height: 100%;
   width: 75%;
   flex-wrap: wrap;
-  margin: 0 10px;
+  margin: auto;
 }
 .ship {
   display: flex;
@@ -238,4 +228,15 @@ body {
 .miss {
   color: #205344;
   background: dodgerblue;
+}
+#game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+#game-info p {
+  text-align: center;
+  height: 150px;
+  font-size: 45px;
 }

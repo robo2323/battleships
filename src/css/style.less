@@ -2,10 +2,10 @@
 @import url('https://fonts.googleapis.com/css?family=Nanum+Brush+Script');
 
 @blue: rgb(120, 125, 207);
-@green: rgb(0, 190, 73);
+@green: rgb(0, 190, 101);
 @red: rgb(255, 72, 0);
 @black: rgb(32, 83, 68);
-@offwhite: #f6f6ef;
+@offwhite: #f3f3e9;
 @white: #fdfdfb;
 
 html,
@@ -22,12 +22,12 @@ body {
   user-select: none;
   font-family: 'Nanum Brush Script', cursive;
   font-size: 1.5rem;
-  box-sizing: border-box;
+  // box-sizing: border-box;
 }
 
 .clickable {
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 .faded {
   opacity: 0.2;
@@ -51,7 +51,7 @@ body {
   margin: -3.4% auto;
   width: 800px;
   height: 100px;
-  background: @white;
+  background: @offwhite;
   border-radius: 3px;
   z-index: -1;
 }
@@ -61,7 +61,7 @@ body {
   margin: auto;
   width: 800px;
   height: 900px;
-  background: @white;
+  background: @offwhite;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 4px #111;
   z-index: -1;
@@ -127,15 +127,8 @@ body {
   grid-auto-flow: row;
 }
 .divider {
-  background: transparent;
-  display: flex;
-  h1 {
-    transform: rotateZ(-90deg);
 
-    margin: 30% auto;
-  }
   button {
-    position: absolute;
     height: 70px;  
     background: transparent;
     border: 2px dashed @black;
@@ -185,8 +178,10 @@ body {
 
 #play-area {
   .area-mixin;
+  border-radius: 0 0 10px 0;
+  
   .board-square{
-  border: 2px dashed @green;
+  border: 1px dashed @green;
     
   }
 }
@@ -195,7 +190,7 @@ body {
   font-size: 65px;
 
   &:hover {
-    border: 2px solid tomato;
+    border: 1px solid tomato;
     transform: scale(1.2);
     background: rgba(255, 99, 71, 0.363);
   }
@@ -207,12 +202,11 @@ body {
 .ship-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: flex-start;
   height: 100%;
   width: 75%;
   flex-wrap: wrap;
-  margin: 0 10px;
+  margin: auto;
 }
 .ship {
   display: flex;
@@ -264,4 +258,18 @@ body {
 .miss {
   color: @black;
   background: dodgerblue
+}
+
+
+#game-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  p{
+    text-align: center;
+    height: 150px;
+    font-size: 45px;
+  }
+
 }

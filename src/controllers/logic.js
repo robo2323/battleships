@@ -49,12 +49,12 @@ export default function() {
       Sub_One: { display: ['<^'], hits: [], strength: 1 },
       Sub_Two: { display: ['<^'], hits: [], strength: 1 }
     },
-    pOneSunkShips:0,
-    pTwoSunkShips:0,
-    pOneShotsLeft:7,
-    pTwoShotsLeft:7,
-    pOneScore:0,
-    pTwoScore:0,
+    pOneSunkShips: 0,
+    pTwoSunkShips: 0,
+    pOneShotsLeft: 7,
+    pTwoShotsLeft: 7,
+    pOneScore: 0,
+    pTwoScore: 0,
     selectRandomSquare: function() {
       const x = Math.floor(Math.random() * 10) + 1;
       const y = Math.floor(Math.random() * 10) + 1;
@@ -66,21 +66,25 @@ export default function() {
       return this[board][x][y];
     },
     checkAdjacentSquares: function(
-      board = 'playerOneBoard',
       [x, y],
-      direction
+      direction,
+      board = 'playerOneBoard'
     ) {
       x = +x;
       y = +y;
+      const up = y - 1 > 1 ? y - 1 : 1;
+      const down = y + 1 < 10 ? y + 1 : 10;
+      const left = x - 1 > 1 ? x - 1 : 1;
+      const right = x + 1 < 10 ? x + 1 : 10;
       switch (direction) {
       case 0:
-        return [x, y - 1];
+        return [x, up];
       case 1:
-        return [x, y + 1];
+        return [x, down];
       case 2:
-        return [x - 1, y];
+        return [x - left];
       case 3:
-        return [x + 1, y];
+        return [x + right];
       }
     },
     checkSquareInDirection: function(board, [x, y], direction, ships, ship) {
@@ -157,9 +161,10 @@ export default function() {
     },
     newBrain: brain(),
     consultBrain: function(x, y) {
-      console.log(this.newBrain);
-      
-      
+      return this.newBrain;
+    },
+    updateBrain: function(key, value) {
+      this.newBrain[key] = value;
     }
   };
 }
