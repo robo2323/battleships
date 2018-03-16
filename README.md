@@ -22,6 +22,8 @@ Open _**index.html**_ in the _**dist**_ directory to play the game.
 - [ ] Restructure code to take full advantage of Webpack, separating all functions out into their own files.
 - [ ] Make network play possible
 - [ ] Improve AI (using probabilities or dynamic programming?)  
+- [ ] More game modes
+- [ ] players alternate turns between games
 ## License
 Dual MIT & GPL
 

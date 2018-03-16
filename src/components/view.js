@@ -7,18 +7,22 @@ import getXY from './getXY';
 import removeClass from './removeClass';
 
 export default function() {
+  // declare globals
   let clicked = true,
     clickable = true,
     play = false,
     direction = false,
     pickedShip = 'Carrier';
+
   // draw blue lines on paper
   renderLines();
 
+  // start/reset game
   const startNewGame = function() {
     let newGame = new Game();
     newGame.setBoard();
 
+    // reset DOM/classes
     const ships = document.querySelectorAll('.ship[data-placed="true"]');
     for (let i = 0; i < ships.length; i++) {
       ships[i].classList.remove('placed-selected-ship');
@@ -28,13 +32,14 @@ export default function() {
       $.id('game-message').textContent =
         'Place all your ships on the board above or click "Place Ships Randomly"';
 
-      console.log(ships[i].classList);
     }
     return newGame;
   };
+
   let newGame = startNewGame();
   console.log(newGame.playerTwoBoard);
 
+  // handle clicks on player board/ship placement
   const trackBoardSquareClick = function(e) {
     e.preventDefault();
 
@@ -99,8 +104,9 @@ export default function() {
         clicked = true;
       }
     }
-    console.log(newGame);
   };
+
+  // function for clicking anywhere to reset game after win/lose
   const clickAnywhere = function(e) {
     e.preventDefault();
     clicked = true;
@@ -114,6 +120,8 @@ export default function() {
 
     document.removeEventListener('click', clickAnywhere);
   };
+
+  // main logic for checking player and ai shots
   const checkShot = function(board, [x, y], ships, that) {
     x = +x;
     y = +y;
@@ -185,6 +193,8 @@ export default function() {
       ? drawBoardArea('play-area')
       : drawBoardArea('track-area');
   };
+
+  // main ai function to pick a square for shot
   const aiPlay = function() {
     let aiTurn;
     let x;
@@ -232,7 +242,7 @@ export default function() {
     }
   };
 
-  // make a shot/guess
+  // human player makes a shot/guess (clicks player board)
   const playBoardSquareClick = function(e) {
     if (!play) {
       return;
@@ -300,6 +310,7 @@ export default function() {
     }
   };
 
+
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
     let x = xy[1];
@@ -354,6 +365,7 @@ export default function() {
     }
   };
 
+  // render play boards and divs
   const drawBoardArea = (area) => {
     const areaEl = $.id(area);
     areaEl.innerHTML = '';
@@ -383,6 +395,7 @@ export default function() {
           div.id = `${area}-${i}-${c}`;
           div.classList = 'board-square clickable';
 
+          // get content of board square in playerboard array
           const board =
             area === 'play-area' ? 'playerTwoBoard' : 'playerOneBoard';
           let squareContent = newGame.checkSquare(board, [i, c]);

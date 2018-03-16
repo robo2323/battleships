@@ -1,6 +1,7 @@
 import $ from '../utils/$';
 import brain from './brain';
 
+// game state object constructor
 export default function() {
   return {
     playerOneBoard: [
@@ -16,6 +17,7 @@ export default function() {
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
+    // stores some specific styles for game board squares
     pOneStyles: [],
     playerTwoBoard: [
       ['', '', '', '', '', '', '', '', '', '', ''],
@@ -30,9 +32,11 @@ export default function() {
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       ['', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
+    // stores some specific styles for game board squares
     pTwoStyles: [],
+    // player ship objects
     playerOneShips: {
-      Carrier: { display: ['<=', '=', '=', '=', '=]'], hits: [], strength: 5 },
+      Carrier: { display: ['<=', '=', '=', '=', '=]'], hits: [], strength: 5 }, //strength is actually ship length
       Battleship: { display: ['<<', '[]', '[]', '>>'], hits: [], strength: 4 },
       Cruiser: { display: ['<<', '[]', '>>'], hits: [], strength: 3 },
       Destroyer_One: { display: ['<[', ']>'], hits: [], strength: 2 },
@@ -55,18 +59,20 @@ export default function() {
     pTwoShotsLeft: 7,
     pOneScore: 0,
     pTwoScore: 0,
-    pOneMoves:0,
-    pTwoMoves:0,
+    pOneMoves: 0,
+    pTwoMoves: 0,
     selectRandomSquare: function() {
       const x = Math.floor(Math.random() * 10) + 1;
       const y = Math.floor(Math.random() * 10) + 1;
       return [x, y];
     },
+    // check if square is empty or not
     checkSquare: function(board, [x, y]) {
       x = +x;
       y = +y;
       return this[board][x][y];
     },
+    // give co ordinates of squares adjacent to input square
     checkAdjacentSquares: function(
       [x, y],
       direction,
@@ -90,6 +96,7 @@ export default function() {
         return [right, y];
       }
     },
+    //check weather (n)squares in a particualr direction are emoty
     checkSquareInDirection: function(board, [x, y], direction, ships, ship) {
       x = +x;
       y = +y;
@@ -119,6 +126,7 @@ export default function() {
         }
       }
     },
+    // randomly place ships in playerBoard object
     setBoard: function(board = 'playerTwoBoard', ships = 'playerTwoShips') {
       this.resetBoard(board);
 
@@ -162,10 +170,13 @@ export default function() {
         setStartSquare(this, shipKey, shipKey);
       }
     },
+    // create new brain object, brain stores some info about prevous shot if it was a hit
     newBrain: brain(),
+    // get brain object
     consultBrain: function(x, y) {
       return this.newBrain;
     },
+    // update brain object
     updateBrain: function(key, value) {
       this.newBrain[key] = value;
     }
