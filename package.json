@@ -1,4 +1,19 @@
 {
+  "name": "Battleships",
+  "description": "### To play, see the [live version](https://robo2323.github.io/battleships/)",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robo2323/battleships.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robo2323/battleships/issues"
+  },
+  "homepage": "https://github.com/robo2323/battleships#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -22,6 +37,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "dev-server": "webpack-serve ./webpack.config.js"
+    "dev-server": "webpack-serve ./webpack.config.js",
+    "parcel":"parcel build ./src/index.src.html --public-url ./"
   }
 }

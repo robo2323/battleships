@@ -485,7 +485,7 @@ export default function() {
       playerShips[i].removeEventListener('click', clickPlayerShipHandeler);
     }
     play = true;
-    $.id('game-message').textContent = 'Your turn...';
+    $.id('game-message').textContent = 'Your turn -->';
 
     drawBoardArea('track-area');
   };

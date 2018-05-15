@@ -65,8 +65,10 @@ const app = function() {
             <div id="game-info" class="divider">
             <button id="place-randomly">>Place Ships Randomly<</button>
             <p id="game-message">
-                Place all your ships on the board above or click "Place Ships Randomly" 
-            </p>
+                Place all your ships on the board above or click "Place Ships Randomly"<br> 
+                When placing ships you can press any key on your keyboard to rotate it<br>
+                Once all your ships are placed the game will start!
+            </p>           
             
             <h1>Battleships!</h1>
             </div>

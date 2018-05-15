@@ -8,9 +8,6 @@ body {
   background: url('../img/dark-wood.jpg');
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-family: 'Nanum Brush Script', cursive;
   font-size: 1.5rem;
@@ -20,7 +17,8 @@ body {
 }
 @media (max-width: 1600px) {
   body {
-    transform: scale(0.8) translateY(-100px);
+    -webkit-transform: scale(0.8) translateY(-100px);
+            transform: scale(0.8) translateY(-100px);
     overflow: scroll;
   }
   #paper-container {
@@ -29,6 +27,7 @@ body {
 }
 .clickable {
   cursor: crosshair;
+  -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
 .faded {
@@ -74,7 +73,8 @@ body {
   border-top: 5px dotted white;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 4px #111;
-  transform: rotate(-2deg);
+  -webkit-transform: rotate(-2deg);
+          transform: rotate(-2deg);
   z-index: -2;
 }
 #paper4 {
@@ -85,7 +85,8 @@ body {
   background: #fdfdfb;
   border-radius: 0 0 10px 10px;
   box-shadow: 1px 1px 4px #111;
-  transform: rotate(-3deg);
+  -webkit-transform: rotate(-3deg);
+          transform: rotate(-3deg);
   z-index: -3;
 }
 #paper5 {
@@ -96,7 +97,8 @@ body {
   background: #f3f3eb;
   border-radius: 0 0 10px 10px;
   box-shadow: 2px 2px 5px #111;
-  transform: rotate(-4deg);
+  -webkit-transform: rotate(-4deg);
+          transform: rotate(-4deg);
   z-index: -4;
 }
 #paper6 {
@@ -108,7 +110,8 @@ body {
   background: #f3f3eb;
   border-radius: 0 0 10px 10px;
   box-shadow: 1px 1px 5px #111;
-  transform: rotate(-5deg);
+  -webkit-transform: rotate(-5deg);
+          transform: rotate(-5deg);
   z-index: -5;
 }
 .board {
@@ -131,6 +134,7 @@ body {
   font-size: 30px;
   color: #f5511f;
   cursor: crosshair;
+  -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
 .divider button:hover {
@@ -190,17 +194,24 @@ body {
   color: black;
 }
 .ship-container {
+  display: -webkit-box;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  -webkit-box-pack: start;
+          justify-content: flex-start;
   height: 100%;
   width: 75%;
   flex-wrap: wrap;
   margin: auto;
 }
 .ship {
+  display: -webkit-box;
   display: flex;
-  flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
   margin: 20px;
 }
 .ship p {
@@ -211,6 +222,7 @@ body {
   margin: 0;
 }
 .ship div {
+  -webkit-transition: all 0.1s;
   transition: all 0.1s;
   text-align: center;
   line-height: 30px;
@@ -229,7 +241,8 @@ body {
   background: #36b574;
 }
 .current-ship-selected div {
-  transform: scale(1.3);
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
   color: #377ca5;
 }
 .hit {
@@ -241,15 +254,20 @@ body {
   background: dodgerblue;
 }
 #game-info {
+  display: -webkit-box;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+          justify-content: space-evenly;
   padding: 10px;
 }
 #game-info p {
   text-align: center;
-  font-size: 48px;
+  font-size: 30px;
   color: #377ca5;
   margin: 0;
   height: 250px;
