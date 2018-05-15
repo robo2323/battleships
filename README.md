@@ -1,4 +1,4 @@
-# GA Project 0: ~~Tic Tac Toe~~ Battleships!
+# General Assembly Web Development Immersive Project 0: Battleships!
 
 ### To play, see the [live version](https://robo2323.github.io/battleships/) 
 
