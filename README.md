@@ -17,6 +17,8 @@ This will build the bundle.js file into the _**dist**_ directory.
 Open _**index.html**_ in the _**dist**_ directory to play the game.
 
 ## About
+This project uses vanilla JavaScript/HTML and LESS/CSS. The play boards are done with the *CSS Grid* layout system.
+
 I think I was trying to structure the project a bit like a React app without realising it, with partial success. Looking at it now (I am writing this a couple months after coding it) it is quite a strange way I have structured it, injecting that whole chunk of back-tick wrapped HTML from the index.js to the DOM. I'm sure I had a logical reason for doing that at the time....Perhaps I should re-build this actually using React
 
 ## TODOs

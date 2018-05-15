@@ -157,6 +157,8 @@ body {
   font-size: 40px;
 }
 #track-area {
+  -webkit-transition: 0.35s all;
+  transition: 0.35s all;
   display: grid;
   grid-template-columns: 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909%;
   grid-template-rows: 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909% 9.0909%;

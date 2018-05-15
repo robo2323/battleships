@@ -29,9 +29,7 @@ export default function() {
       ships[i].classList.add('clickable');
       ships[i].setAttribute('data-placed', 'false');
       ships[i].addEventListener('click', clickPlayerShipHandeler);
-      $.id('game-message').textContent =
-        'Place all your ships on the board above or click "Place Ships Randomly"';
-
+      $.id('game-message').textContent = 'Place all your ships on the board above or click "Place Ships Randomly"';
     }
     return newGame;
   };
@@ -60,21 +58,17 @@ export default function() {
       );
 
       if (!cantPlace) {
-        const playerShip = document.querySelector(
-          `.ship[data-ship="${pickedShip}"]`
-        );
+        const playerShip = document.querySelector(`.ship[data-ship="${pickedShip}"]`);
         for (let i = 0; i < placedShipSquares.length; i++) {
           let x = placedShipSquares[i].getAttribute('data-y');
           let y = placedShipSquares[i].getAttribute('data-x');
 
-          newGame.playerOneBoard[x][y] = `${
-            newGame.playerOneShips[pickedShip].display[i]
-          }-${pickedShip}${direction ? '-rot' : ''}`;
+          newGame.playerOneBoard[x][y] = `${newGame.playerOneShips[pickedShip].display[i]}-${pickedShip}${
+            direction ? '-rot' : ''
+          }`;
           drawBoardArea('track-area');
         }
-        if (
-          document.querySelectorAll('.ship[data-placed="false"]').length > 1
-        ) {
+        if (document.querySelectorAll('.ship[data-placed="false"]').length > 1) {
           playerShip.setAttribute('data-placed', 'true');
           playerShip.classList.remove('clickable', 'current-ship-selected');
           playerShip.classList.add('placed-selected-ship');
@@ -90,10 +84,7 @@ export default function() {
           }
           clicked = !clicked;
         } else {
-          removeClass(
-            document.querySelectorAll('.track-board-square'),
-            'placing-ship'
-          );
+          removeClass(document.querySelectorAll('.track-board-square'), 'placing-ship');
           clicked = false;
           clickable = false;
           play = true;
@@ -130,10 +121,7 @@ export default function() {
 
     if ((square === 'X' || square === '/') && board === 'playerOneBoard') {
       if (newGame.consultBrain().hit) {
-        newGame.updateBrain(
-          'currentDirection',
-          newGame.consultBrain().currentDirection + 1
-        );
+        newGame.updateBrain('currentDirection', newGame.consultBrain().currentDirection + 1);
       }
       aiPlay();
       return;
@@ -176,9 +164,7 @@ export default function() {
       } else {
         newGame.pOneScore++;
         if (newGame.pOneScore === 18) {
-          $.id('game-message').textContent = `You Won in ${
-            newGame.pOneMoves
-          } moves! Click Anywhere to play again.`;
+          $.id('game-message').textContent = `You Won in ${newGame.pOneMoves} moves! Click Anywhere to play again.`;
           play = false;
           setTimeout(() => {
             document.addEventListener('click', clickAnywhere);
@@ -189,9 +175,7 @@ export default function() {
       newGame[board][x][y] = '/';
     }
 
-    board === 'playerTwoBoard'
-      ? drawBoardArea('play-area')
-      : drawBoardArea('track-area');
+    board === 'playerTwoBoard' ? drawBoardArea('play-area') : drawBoardArea('track-area');
   };
 
   // main ai function to pick a square for shot
@@ -204,14 +188,8 @@ export default function() {
       aiTurn = newGame.selectRandomSquare();
       x = aiTurn[0];
       y = aiTurn[1];
-    } else if (
-      newGame.consultBrain().hit &&
-      newGame.consultBrain().currentDirection < 4
-    ) {
-      aiTurn = newGame.checkAdjacentSquares(
-        newGame.consultBrain().hitSquare,
-        newGame.consultBrain().currentDirection
-      );
+    } else if (newGame.consultBrain().hit && newGame.consultBrain().currentDirection < 4) {
+      aiTurn = newGame.checkAdjacentSquares(newGame.consultBrain().hitSquare, newGame.consultBrain().currentDirection);
       if (!aiTurn) {
         aiTurn = newGame.selectRandomSquare();
       }
@@ -224,12 +202,7 @@ export default function() {
       y = aiTurn[1];
     }
 
-    const shot = checkShot(
-      'playerOneBoard',
-      [...aiTurn],
-      'playerOneShips',
-      $.id(`track-area-${x}-${y}`)
-    );
+    const shot = checkShot('playerOneBoard', [...aiTurn], 'playerOneShips', $.id(`track-area-${x}-${y}`));
     if (newGame.consultBrain().hit) {
       if (newGame.consultBrain().currentDirection === 3) {
         newGame.updateBrain('currentDirection', 0);
@@ -249,9 +222,7 @@ export default function() {
     }
     if (play) {
       const shots = newGame.pOneShotsLeft - 1;
-      $.id(
-        'game-message'
-      ).innerHTML = `<em>Your turn</em>...You have <em><strong>${shots}</strong> shot${
+      $.id('game-message').innerHTML = `<em>Your turn</em>...You have <em><strong>${shots}</strong> shot${
         shots < 2 ? '' : 's'
       }</em> left`;
     }
@@ -265,7 +236,11 @@ export default function() {
 
     shotNotTaken = checkShot('playerTwoBoard', [x, y], 'playerTwoShips', this);
 
+    /////////////////// ai's turn ///////////////////////////////////////////////
     if (!shotNotTaken && newGame.pOneShotsLeft === 1 && play) {
+
+      // document.querySelector('#track-area').style.transform='scale(1.5)';
+
       const squares = document.querySelectorAll('#play-area > div');
       for (let i = 0; i < squares.length; i++) {
         squares[i].removeEventListener('click', playBoardSquareClick);
@@ -281,8 +256,7 @@ export default function() {
         setTimeout(() => {
           aiPlay();
         }, thinkingTime);
-        thinkingTime =
-          thinkingTime + Math.floor(Math.random() * (500 - 100 + 1) + 100);
+        thinkingTime = thinkingTime + Math.floor(Math.random() * (500 - 100 + 1) + 100);
         aiTime += thinkingTime;
 
         newGame.pTwoMoves++;
@@ -294,9 +268,7 @@ export default function() {
           squares[i].addEventListener('click', playBoardSquareClick);
 
           if (play) {
-            $.id(
-              'game-message'
-            ).innerHTML = `<em>Your turn</em>...You have <em>${
+            $.id('game-message').innerHTML = `<em>Your turn</em>...You have <em>${
               newGame.pOneShotsLeft
             } shots</em> left`;
           }
@@ -309,7 +281,6 @@ export default function() {
       newGame.pOneMoves++;
     }
   };
-
 
   const drawShipToPlace = function(area, xy) {
     let y = xy[0];
@@ -396,8 +367,7 @@ export default function() {
           div.classList = 'board-square clickable';
 
           // get content of board square in playerboard array
-          const board =
-            area === 'play-area' ? 'playerTwoBoard' : 'playerOneBoard';
+          const board = area === 'play-area' ? 'playerTwoBoard' : 'playerOneBoard';
           let squareContent = newGame.checkSquare(board, [i, c]);
 
           if (area === 'track-area') {
@@ -489,7 +459,5 @@ export default function() {
 
     drawBoardArea('track-area');
   };
-  document
-    .querySelector('#place-randomly')
-    .addEventListener('click', placeRandomly);
+  document.querySelector('#place-randomly').addEventListener('click', placeRandomly);
 }
